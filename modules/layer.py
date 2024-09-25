@@ -4,10 +4,13 @@ import numpy.linalg as la
 from numpy.linalg import norm
 
 class layer:
-    def __init__(self, monomer_diameter, start_pos, heading, starting_index = 1):
+    def __init__(self, monomer_diameter, start_pos, heading, atom_type = 1, starting_index:int = 1):
         self.__monomer_diameter = monomer_diameter
         self.__start_pos = np.array(start_pos)
         self.__heading = np.array(heading)
+        
+        
+        self.__atom_types = [atom_type] * 4
         
         self.positions = []
         self.positions.append(self.__start_pos)
@@ -71,6 +74,10 @@ class layer:
     @property
     def mono_diameter(self):
         return self.__monomer_diameter
+    
+    @property
+    def atom_types(self):
+        return self.__atom_types
         
         
         
