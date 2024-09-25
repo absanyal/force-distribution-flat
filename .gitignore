@@ -4,3 +4,4 @@
 !*.py
 old.*
 modules/old.*
+test_filament.py
