@@ -4,7 +4,7 @@ import numpy.linalg as la
 from numpy.linalg import norm
 
 class layer:
-    def __init__(self, monomer_diameter, start_pos, heading, starting_index:int = 1):
+    def __init__(self, monomer_diameter, start_pos, heading, starting_index:int):
         self.__monomer_diameter = monomer_diameter
         self.__start_pos = np.array(start_pos)
         self.__heading = np.array(heading)
