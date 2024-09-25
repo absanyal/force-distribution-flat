@@ -50,6 +50,7 @@ class filament:
         h, f, g = this_layer.get_basis()
         self.__basis_sets.append([h, f, g])
 
+        # Generating layers to build the filament
         num_layers = len(self.__layers)
         for _ in range(1, self.__num_monomers + 1):
             this_layer = this_layer.make_next_layer()
@@ -103,9 +104,15 @@ class filament:
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
             if has_linker:
-                p2 = self.__layers[layer_i].positions[1]
-                linker_starting_pos = p2 - s1 * (h + g) - d * f
-                linker_heading = f
+                p1 = self.__layers[layer_i].positions[1]
+                p2 = self.__layers[layer_i].positions[2]
+                p3 = self.__layers[next_layer_i].positions[1]
+                p4 = self.__layers[next_layer_i].positions[2]
+                
+                linker_heading = -g
+                
+                linker_starting_pos = - g * d + (p1 + p2 + p3 + p4) / 4
+                
                 linker_starting_index = (
                     len(self.__layers) * 4) + (sum(self.__linker_list[:monomer_index]) * 4) + 1
 
@@ -132,7 +139,7 @@ class filament:
             i7 = int(layer2.indices[2])
             i8 = int(layer2.indices[3])
 
-            # Creating bond connections for the cube
+            # Creating bond connections for the cube when linkers are not involved
 
             # Intra-layer bonds
             bond_type = 1
@@ -158,7 +165,7 @@ class filament:
             self.__bonds.append([bond_type, i2, i6])
             self.__bonds.append([bond_type, i3, i7])
             
-                        # Create angles when linkers are not involved
+            # Create angles when linkers are not involved
             angle_type = 1  # theta1
 
             self.__angles.append([angle_type, i1, i2, i6])
@@ -235,8 +242,6 @@ class filament:
                 
                 angle_type = 3 # pi/2
 
-                # ---------------------------------------------
-
                 self.__angles.append([angle_type, l1, l2, l3])
                 self.__angles.append([angle_type, l2, l3, l4])
                 self.__angles.append([angle_type, l3, l4, l1])
@@ -307,6 +312,12 @@ class filament:
         
         return R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4
 
+
+    #############################################################################
+    # Methods for the filament
+    #############################################################################
+
+    
     #############################################################################
     # Properties of the filament
     #############################################################################
@@ -354,6 +365,10 @@ class filament:
     @property
     def linkers(self):
         return self.__linkers
+    
+    @property
+    def linker_diameter(self):
+        return self.__linker_diameter
 
     @property
     def num_monomers(self):
@@ -374,3 +389,9 @@ class filament:
     @property
     def num_angles(self):
         return len(self.__angles)
+    
+    @property
+    def total_particles(self):
+        layers_particles = 4 * len(self.__layers)
+        linkers_particles = 4 * len(self.__linkers)
+        return layers_particles + linkers_particles
