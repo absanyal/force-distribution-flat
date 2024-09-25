@@ -1,0 +1,6 @@
+*
+!.gitignore
+!modules/
+!*.py
+old.*
+modules/old.*
