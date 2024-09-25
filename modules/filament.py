@@ -100,26 +100,6 @@ class filament:
         phi3 = arccos((a - aL) / (2 * gamma))
         phi4 = pi - phi3
 
-        ##### TESTING #####
-        print("R: {:.4f}".format(R))
-        print("d: {:.4f}".format(d))
-        print("a: {:.4f}".format(a))
-        print("a1: {:.4f}".format(a1))
-        print("a2: {:.4f}".format(a2))
-        print("l: {:.4f}".format(l))
-        print("s1: {:.4f}".format(s1))
-        print("s2: {:.4f}".format(s2))
-        print("aF: {:.4f}".format(aF))
-        print("aL: {:.4f}".format(aL))
-        print("theta1 (degrees): {:.4f}".format(np.degrees(theta1)))
-        print("theta2 (degrees): {:.4f}".format(np.degrees(theta2)))
-        print("gamma: {:.4f}".format(gamma))
-        print("phi1 (degrees): {:.4f}".format(np.degrees(phi1)))
-        print("phi2 (degrees): {:.4f}".format(np.degrees(phi2)))
-        print("phi3 (degrees): {:.4f}".format(np.degrees(phi3)))
-        print("phi4 (degrees): {:.4f}".format(np.degrees(phi4)))
-        ###################
-
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
             if has_linker:
@@ -252,49 +232,6 @@ class filament:
                 self.__bonds.append([bond_type, i3, l4])
 
                 # Create angles when linkers are involved
-
-                # angle_type = 1  # theta1
-
-                # self.__angles.append([angle_type, i1, i2, i6])
-                # self.__angles.append([angle_type, i5, i6, i2])
-                # self.__angles.append([angle_type, i4, i3, i7])
-                # self.__angles.append([angle_type, i8, i7, i3])
-
-                # # _____________________________________________
-
-                # angle_type = 2  # theta2
-
-                # self.__angles.append([angle_type, i2, i1, i5])
-                # self.__angles.append([angle_type, i6, i5, i1])
-                # self.__angles.append([angle_type, i3, i4, i8])
-                # self.__angles.append([angle_type, i7, i8, i4])
-
-                # # _____________________________________________
-
-                # angle_type = 3  # pi/2
-
-                # self.__angles.append([angle_type, i1, i2, i3])
-                # self.__angles.append([angle_type, i2, i3, i4])
-                # self.__angles.append([angle_type, i3, i4, i1])
-                # self.__angles.append([angle_type, i4, i1, i2])
-                # self.__angles.append([angle_type, i5, i6, i7])
-                # self.__angles.append([angle_type, i6, i7, i8])
-                # self.__angles.append([angle_type, i7, i8, i5])
-                # self.__angles.append([angle_type, i8, i5, i6])
-
-                # # ---------------------------------------------
-
-                # self.__angles.append([angle_type, i1, i5, i8])
-                # self.__angles.append([angle_type, i5, i8, i4])
-                # self.__angles.append([angle_type, i8, i4, i1])
-                # self.__angles.append([angle_type, i4, i1, i5])
-
-                # # ---------------------------------------------
-
-                # self.__angles.append([angle_type, i2, i6, i7])
-                # self.__angles.append([angle_type, i6, i7, i3])
-                # self.__angles.append([angle_type, i7, i3, i2])
-                # self.__angles.append([angle_type, i3, i2, i6])
                 
                 angle_type = 3 # pi/2
 
@@ -340,6 +277,35 @@ class filament:
                 self.__angles.append([angle_type, i7, l3, l2])
                 self.__angles.append([angle_type, i2, l1, l4])
                 self.__angles.append([angle_type, i3, l4, l1])
+    
+    def get_parameters(self):
+        a = (self.__monomer_diameter)
+        R = self._radius_of_curvature
+        d = self.__linker_distance
+
+        a1 = a + ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
+        a2 = a - ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
+
+        l = a * R  / np.sqrt(4 * R**2 - a**2)
+
+        aF = a1
+        aL = self.__linker_diameter
+
+        s1 = (aF - aL) / 2
+        s2 = (1/2) * np.sqrt((aF - aL)**2 + d**2)
+
+        theta1 = arcsin(a / (2 * l))
+        theta2 = pi - theta1
+
+        gamma = sqrt((1/4)*(a - aL)**2 + (1/4) * (a1 - aL)**2 + d**2)
+
+        phi1 = arccos((a1 - aL) / (2 * gamma))
+        phi2 = pi - phi1
+
+        phi3 = arccos((a - aL) / (2 * gamma))
+        phi4 = pi - phi3
+        
+        return R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4
 
     #############################################################################
     # Properties of the filament
