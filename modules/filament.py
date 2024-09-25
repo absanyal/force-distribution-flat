@@ -42,8 +42,10 @@ class filament:
     def __generate_filament(self):
         # Monomer circle of diameter a is inscribed in a square of side length a
         a = (self.__monomer_diameter)
+        
+        starting_index = 1
 
-        this_layer = layer(a, self.__start_pos, self.__heading)
+        this_layer = layer(a, self.__start_pos, self.__heading, starting_index)
         self.__layers.append(this_layer)
         h, f, g = this_layer.get_basis()
         self.__basis_sets.append([h, f, g])
@@ -175,8 +177,52 @@ class filament:
             bond_type = 3
             self.__bonds.append([bond_type, i2, i6])
             self.__bonds.append([bond_type, i3, i7])
+            
+                        # Create angles when linkers are not involved
+            angle_type = 1  # theta1
 
-            # Bonds to connect linker to monomer
+            self.__angles.append([angle_type, i1, i2, i6])
+            self.__angles.append([angle_type, i5, i6, i2])
+            self.__angles.append([angle_type, i4, i3, i7])
+            self.__angles.append([angle_type, i8, i7, i3])
+
+            # _____________________________________________
+
+            angle_type = 2  # theta2
+
+            self.__angles.append([angle_type, i2, i1, i5])
+            self.__angles.append([angle_type, i6, i5, i1])
+            self.__angles.append([angle_type, i3, i4, i8])
+            self.__angles.append([angle_type, i7, i8, i4])
+
+            # _____________________________________________
+
+            angle_type = 3  # pi/2
+
+            self.__angles.append([angle_type, i1, i2, i3])
+            self.__angles.append([angle_type, i2, i3, i4])
+            self.__angles.append([angle_type, i3, i4, i1])
+            self.__angles.append([angle_type, i4, i1, i2])
+            self.__angles.append([angle_type, i5, i6, i7])
+            self.__angles.append([angle_type, i6, i7, i8])
+            self.__angles.append([angle_type, i7, i8, i5])
+            self.__angles.append([angle_type, i8, i5, i6])
+
+            # ---------------------------------------------
+
+            self.__angles.append([angle_type, i1, i5, i8])
+            self.__angles.append([angle_type, i5, i8, i4])
+            self.__angles.append([angle_type, i8, i4, i1])
+            self.__angles.append([angle_type, i4, i1, i5])
+
+            # ---------------------------------------------
+
+            self.__angles.append([angle_type, i2, i6, i7])
+            self.__angles.append([angle_type, i6, i7, i3])
+            self.__angles.append([angle_type, i7, i3, i2])
+            self.__angles.append([angle_type, i3, i2, i6])
+
+            # Bonds and angles involving linkers
 
             linker_index = 0  # index of the linker in the list of linkers
             # This number may be less than the number of monomers, so must be incremented by one iff has_linker is True
@@ -205,50 +251,52 @@ class filament:
                 self.__bonds.append([bond_type, i7, l3])
                 self.__bonds.append([bond_type, i3, l4])
 
-                # Create angles
+                # Create angles when linkers are involved
 
-                angle_type = 1  # theta1
+                # angle_type = 1  # theta1
 
-                self.__angles.append([angle_type, i1, i2, i6])
-                self.__angles.append([angle_type, i5, i6, i2])
-                self.__angles.append([angle_type, i4, i3, i7])
-                self.__angles.append([angle_type, i8, i7, i3])
+                # self.__angles.append([angle_type, i1, i2, i6])
+                # self.__angles.append([angle_type, i5, i6, i2])
+                # self.__angles.append([angle_type, i4, i3, i7])
+                # self.__angles.append([angle_type, i8, i7, i3])
 
-                # _____________________________________________
+                # # _____________________________________________
 
-                angle_type = 2  # theta2
+                # angle_type = 2  # theta2
 
-                self.__angles.append([angle_type, i2, i1, i5])
-                self.__angles.append([angle_type, i6, i5, i1])
-                self.__angles.append([angle_type, i3, i4, i8])
-                self.__angles.append([angle_type, i7, i8, i4])
+                # self.__angles.append([angle_type, i2, i1, i5])
+                # self.__angles.append([angle_type, i6, i5, i1])
+                # self.__angles.append([angle_type, i3, i4, i8])
+                # self.__angles.append([angle_type, i7, i8, i4])
 
-                # _____________________________________________
+                # # _____________________________________________
 
-                angle_type = 3  # pi/2
+                # angle_type = 3  # pi/2
 
-                self.__angles.append([angle_type, i1, i2, i3])
-                self.__angles.append([angle_type, i2, i3, i4])
-                self.__angles.append([angle_type, i3, i4, i1])
-                self.__angles.append([angle_type, i4, i1, i2])
-                self.__angles.append([angle_type, i5, i6, i7])
-                self.__angles.append([angle_type, i6, i7, i8])
-                self.__angles.append([angle_type, i7, i8, i5])
-                self.__angles.append([angle_type, i8, i5, i6])
+                # self.__angles.append([angle_type, i1, i2, i3])
+                # self.__angles.append([angle_type, i2, i3, i4])
+                # self.__angles.append([angle_type, i3, i4, i1])
+                # self.__angles.append([angle_type, i4, i1, i2])
+                # self.__angles.append([angle_type, i5, i6, i7])
+                # self.__angles.append([angle_type, i6, i7, i8])
+                # self.__angles.append([angle_type, i7, i8, i5])
+                # self.__angles.append([angle_type, i8, i5, i6])
 
-                # ---------------------------------------------
+                # # ---------------------------------------------
 
-                self.__angles.append([angle_type, i1, i5, i8])
-                self.__angles.append([angle_type, i5, i8, i4])
-                self.__angles.append([angle_type, i8, i4, i1])
-                self.__angles.append([angle_type, i4, i1, i5])
+                # self.__angles.append([angle_type, i1, i5, i8])
+                # self.__angles.append([angle_type, i5, i8, i4])
+                # self.__angles.append([angle_type, i8, i4, i1])
+                # self.__angles.append([angle_type, i4, i1, i5])
 
-                # ---------------------------------------------
+                # # ---------------------------------------------
 
-                self.__angles.append([angle_type, i2, i6, i7])
-                self.__angles.append([angle_type, i6, i7, i3])
-                self.__angles.append([angle_type, i7, i3, i2])
-                self.__angles.append([angle_type, i3, i2, i6])
+                # self.__angles.append([angle_type, i2, i6, i7])
+                # self.__angles.append([angle_type, i6, i7, i3])
+                # self.__angles.append([angle_type, i7, i3, i2])
+                # self.__angles.append([angle_type, i3, i2, i6])
+                
+                angle_type = 3 # pi/2
 
                 # ---------------------------------------------
 
