@@ -48,7 +48,9 @@ class filament:
         this_layer = layer(a, self.__start_pos, self.__heading, starting_index)
         self.__layers.append(this_layer)
         h, f, g = this_layer.get_basis()
-        self.__basis_sets.append([h, f, g])
+        self.__basis_sets.append(h)
+        self.__basis_sets.append(f)
+        self.__basis_sets.append(g)
 
         # Generating layers to build the filament
         num_layers = len(self.__layers)
@@ -100,18 +102,15 @@ class filament:
 
         phi3 = arccos((a - aL) / (2 * gamma))
         phi4 = pi - phi3
-
+     
+        # Generate layers for linkers
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
             if has_linker:
-                p1 = self.__layers[layer_i].positions[1]
-                p2 = self.__layers[layer_i].positions[2]
-                p3 = self.__layers[next_layer_i].positions[1]
-                p4 = self.__layers[next_layer_i].positions[2]
+                p2 = self.__layers[layer_i].positions[1]
                 
-                linker_heading = -g
-                
-                linker_starting_pos = - g * d + (p1 + p2 + p3 + p4) / 4
+                linker_heading = g
+                linker_starting_pos = p2 + d * g + abs(s1) *(h+f)
                 
                 linker_starting_index = (
                     len(self.__layers) * 4) + (sum(self.__linker_list[:monomer_index]) * 4) + 1
@@ -119,11 +118,13 @@ class filament:
                 linker = layer(self.__linker_diameter, linker_starting_pos,
                                linker_heading, linker_starting_index)
                 self.__linkers.append(linker)
-
+        
+        # Save positions for each point on linker
         for linker_i in range(len(self.__linkers)):
             linker = self.__linkers[linker_i]
             self.linker_positions.append(linker.positions)
 
+        # Create bonds and angles
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
 
@@ -283,6 +284,10 @@ class filament:
                 self.__angles.append([angle_type, i2, l1, l4])
                 self.__angles.append([angle_type, i3, l4, l1])
     
+    #############################################################################
+    # Methods for the filament
+    #############################################################################
+    
     def get_parameters(self):
         a = (self.__monomer_diameter)
         R = self._radius_of_curvature
@@ -311,12 +316,6 @@ class filament:
         phi4 = pi - phi3
         
         return R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4
-
-
-    #############################################################################
-    # Methods for the filament
-    #############################################################################
-
     
     #############################################################################
     # Properties of the filament
