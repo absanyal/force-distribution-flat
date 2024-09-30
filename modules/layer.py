@@ -32,11 +32,11 @@ class layer:
         
         a = self.__monomer_diameter
         
-        # +f => 2;  +(f+g) => 3; +g => 4
+        # +g => 2;  +(f+g) => 3; +f => 4
         p1 = self.__start_pos
-        p2 = p1 + a*f
+        p2 = p1 + a*g
         p3 = p1 + a* (f+g)
-        p4 = p1 + a*g
+        p4 = p1 + a*f
         
         index1 = int(self.__start_index)
         index2 = int(index1 + 1)
