@@ -16,13 +16,15 @@ def dump_filament(filepath, filament_list):
             print("Writing filament {} to {}".format(filament_index, filepath))
             
             atom_type = "m"
-            for layer in filamentname.layers:
+            for layer_i, layer in enumerate(filamentname.layers):
                     for j in range(4):
+                        # atom_type = "m{}".format(j+1 + 4*layer_i)
                         f.write("{} {} {:f} {:f} {:f} {}\n".format(atom_type, filament_index, layer.positions[j][0], layer.positions[j][1], layer.positions[j][2], filamentname.monomer_diameter/5))
             
             atom_type = "l"
             for linker_i, linker in enumerate(filamentname.linkers):
                 for atom_i in range(len(linker.positions)):
+                    # atom_type = "l{}".format(atom_i+1)
                     px, py, pz = linker.positions[atom_i]
                     atom_number = linker.indices[atom_i]
                     f.write("{} {} {:f} {:f} {:f} {}\n".format(atom_type, filament_index, px, py, pz, filamentname.linker_diameter/5))
