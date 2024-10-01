@@ -4,6 +4,5 @@
 !*.py
 old.*
 modules/old.*
-test_filament.py
-test_positions.py
-test_misc.py
+test*
+template.*
