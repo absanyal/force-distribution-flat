@@ -4,5 +4,7 @@
 !*.py
 old.*
 modules/old.*
+test_files/*
+old_files/*
 test*
 template.*
