@@ -394,3 +394,11 @@ class filament:
         layers_particles = 4 * len(self.__layers)
         linkers_particles = 4 * len(self.__linkers)
         return layers_particles + linkers_particles
+
+    @property
+    def heading(self):
+        return self.__heading
+    
+    @property
+    def start_pos(self):
+        return self.__start_pos
