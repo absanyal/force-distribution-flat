@@ -1,7 +1,6 @@
 import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
-from modules.save_filament_info import save_filament_info
 
 
 def write_polymer_data(filament_name: filament, box_dimensions: list, mass: list, bond_styles:list, angle_styles:list, data_fname_str: str):
