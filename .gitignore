@@ -1,7 +1,10 @@
 *
+
 !.gitignore
 !modules/
 !*.py
+!submit_*.sh
+
 old.*
 modules/old.*
 test_files/*
