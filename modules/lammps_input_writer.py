@@ -2,7 +2,7 @@ import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
 
-def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, wall_interactions:list, sim_parameters:list, folders:list, brownian_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool):
+def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, wall_interactions:list, sim_parameters:list, folders:list, brownian_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool, fix_nve_min: list, fix_wall: list):
     
     R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4 = filament_name.get_parameters()
 
@@ -19,7 +19,7 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
     
     xlo, xhi, ylo, yhi, zlo, zhi = box_dimensions
     
-    steps_min, steps_run, thermo_min, thermo_run, record_interval, dump_interval_min, dump_interval_run, temperture, timestep = sim_parameters
+    steps_min, steps_run, thermo_min, thermo_run, record_interval, dump_interval_min, dump_interval_run, temperture, timestep, minimization_parameters = sim_parameters
     
     brownian_seed, gamma_t = brownian_parameters
     
@@ -98,7 +98,7 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         # Groups
         for group in groups:
-            group_name, group_type = group
+            group_type, group_name = group
             input_f.write("group {} type {}\n".format(group_name, group_type))
         
         input_f.write("\n")
@@ -164,7 +164,57 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         input_f.write("\n")
         
         input_f.write("\n")
-            
+        
+        #------------------------------------------------------
+        
+        if dump_minimization:   
+            input_f.write("dump minimization all atom ${dump_interval_min} dump/dump.min.${xx}.lammpstrj\n")
+            input_f.write("\n")
+        
+        #------------------------------------------------------
+        
+        etol, ftol, maxiter, maxeval = minimization_parameters
+        input_f.write("minimize {:.6f} {:.6f} {:d} {:d}\n".format(etol, ftol, maxiter, maxeval))
+        
+        input_f.write("\n")
+        
+        #------------------------------------------------------
+        
+        input_f.write("fix {} all nve/limit {:.6f}\n".format(fix_nve_min[0], fix_nve_min[1]))
+        
+        input_f.write("\n")
+        
+        for fix_wall_i in fix_wall:
+            fix_name, fix_type, fix_params = fix_wall_i
+            epsilon, sigma, cutoff = fix_params
+            input_f.write("fix {} {} wall/region membrane lj93 {:.4f} {:.4f} {:.4f}\n".format(fix_name, fix_type, epsilon, sigma, cutoff))
+        
+        input_f.write("\n")
+        
+        #------------------------------------------------------
+        
+        input_f.write("thermo_style custom step time temp etotal\n")
+        input_f.write("thermo ${thermo_min}\n")
+        
+        input_f.write("\n")
+        
+        input_f.write("run ${steps_min}\n")
+        
+        input_f.write("\n")
+        
+        input_f.write("unfix {}\n".format(fix_nve_min[0]))
+        if dump_minimization:
+            input_f.write("undump minimization\n")
+        
+        input_f.write("\n")
+        
+        
+        #------------------------------------------------------
+        
+        
+        # -----------------------------------------------------
+        
+        input_f.write("write_data dump/finalstate_hot.lammpstrj\n")
         
         
             
