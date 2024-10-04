@@ -66,7 +66,8 @@ def write_polymer_data(filament_name: filament, box_dimensions: list, mass: list
                 atom_index = layer.indices[j]
                 px, py, pz = layer.positions[j]
                 data_f.write("{:d} {:d} {:d} {:.4f} {:.4f} {:.4f}\n".format(atom_index, molecule_index, atom_type, px, py, pz))
-        atom_type = 2
+
+        atom_type = 2 # Linker vertex
         for linker_i, linker in enumerate(filament_name.linkers):
             for atom_i in range(len(linker.positions)):
                 atom_index = linker.indices[atom_i]
