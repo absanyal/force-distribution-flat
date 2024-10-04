@@ -41,14 +41,15 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 1
+num_monomers = 2
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = 325
+# distance_from_axis = 325
+distance_from_axis = 0
 
 # Angle of the filament with the wall
 angle = 90
@@ -60,7 +61,10 @@ start_pos = [(xhi - xlo)/2.0 + distance_from_axis,
 heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
-linker_list = np.ones(num_monomers)
+# linker_list = np.ones(num_monomers)
+linker_list = np.zeros(num_monomers)
+linker_list[0] = 1
+# linker_list[1] = 1
 
 # Create the filament
 f1 = filament(num_monomers, monomer_diameter, start_pos, heading,
@@ -135,7 +139,7 @@ wall_interactions = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 1000000
+steps_min = 1000
 steps_run = 1000000
 
 thermo_min = 1000
@@ -143,14 +147,17 @@ thermo_run = 1000
 
 record_interval = 1000
 
-dump_interval_min = 1000
+dump_interval_min = 1
 dump_interval_run = 1000
 
 temperture = 310.0
 time_step = 0.00001
 
+#Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
+minimization_parameters = [0.0, 1.0e-5, 10000, 10000]
+
 sim_parameters = [steps_min, steps_run, thermo_min, thermo_run,
-                  record_interval, dump_interval_min, dump_interval_run, temperture, time_step]
+                  record_interval, dump_interval_min, dump_interval_run, temperture, time_step, minimization_parameters]
 
 folders = ['data', 'dump', 'link_pos', 'e2e_pos', 'com_pos']
 
@@ -165,6 +172,18 @@ else:
 gamma_t = 1.0
 
 brownian_parameters = [seed, gamma_t]
+
+# ----------------------------------------------------------------------------------
+# Fixes
+
+# Fix 1: nve/limit integration for the minimization
+fix_nve_min = ["fix_min", 0.000001]
+
+# Fix 2: wall-atom LJ interactions
+fix_wall =[
+    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.0**(1/6)]],
+    ["walllinker", "linker", [1500.0, 2.1, 2.1 * 2.0**(1/6)]]
+]
 
 ###################################################################################
 ######################### WRITE POLYMER DATA ######################################
@@ -183,4 +202,4 @@ write_polymer_data(f1, box_dimensions, mass, bond_styles,
 
 # ---LAMMPS input file---
 write_lammps_input(filament_name=f1, box_dimensions=box_dimensions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, wall_interactions=wall_interactions,
-                   sim_parameters=sim_parameters, folders=folders, brownian_parameters=brownian_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str)
+                   sim_parameters=sim_parameters, folders=folders, brownian_parameters=brownian_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_wall=fix_wall)
