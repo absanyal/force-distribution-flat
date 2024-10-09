@@ -9,5 +9,6 @@ old.*
 modules/old.*
 test_files/*
 old_files/*
+info/*
 test*
 template.*
