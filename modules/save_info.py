@@ -2,7 +2,7 @@ import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
 
-def save_filament_info(filament_name: filament, info_file: str):
+def save_filament_info(filament_name: filament, info_file_name: str):
     R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4 = filament_name.get_parameters()
 
     num_monomers = filament_name.num_monomers
@@ -12,7 +12,7 @@ def save_filament_info(filament_name: filament, info_file: str):
     num_bonds = filament_name.num_bonds
     num_angles = filament_name.num_angles
     
-    with open('info.txt', 'w') as info_file:
+    with open(info_file_name, 'w') as info_file:
         info_file.write("#R \t d \t a \t a1 \t a2 \t l \t s1 \t s2 \t aF \t aL \t theta1 \t theta2 \t gamma \t phi1 \t phi2 \t phi3 \t phi4 num_monomers \t num_layers \t num_total_particles \t num_linkers \t num_bonds \t num_angles\n")
         
         info_file.write("{:.4f} \t".format(R))
@@ -39,4 +39,22 @@ def save_filament_info(filament_name: filament, info_file: str):
         info_file.write("{} \t".format(num_bonds))
         info_file.write("{} \n".format(num_angles))
     
+def save_box_info(box_dimensions: list, info_file_name: str):
+    xlo, xhi, ylo, yhi, zlo, zhi = box_dimensions
     
+    x_width = xhi - xlo
+    y_width = yhi - ylo
+    z_width = zhi - zlo
+    
+    with open(info_file_name, 'w') as info_file:
+        info_file.write("#xlo \t xhi \t ylo \t yhi \t zlo \t zhi x_width \t y_width \t z_width\n")
+        
+        info_file.write("{:.4f} \t".format(xlo))
+        info_file.write("{:.4f} \t".format(xhi))
+        info_file.write("{:.4f} \t".format(ylo))
+        info_file.write("{:.4f} \t".format(yhi))
+        info_file.write("{:.4f} \t".format(zlo))
+        info_file.write("{:.4f} \t".format(zhi))
+        info_file.write("{:.4f} \t".format(x_width))
+        info_file.write("{:.4f} \t".format(y_width))
+        info_file.write("{:.4f} \n".format(z_width))
