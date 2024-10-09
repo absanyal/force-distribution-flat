@@ -19,7 +19,10 @@ def dump_filament(filepath, filament_list):
             for layer_i, layer in enumerate(filamentname.layers):
                     for j in range(4):
                         # atom_type = "m{}".format(j+1 + 4*layer_i)
-                        f.write("{} {} {:f} {:f} {:f} {}\n".format(atom_type, filament_index, layer.positions[j][0], layer.positions[j][1], layer.positions[j][2], filamentname.monomer_diameter/5))
+                        px = layer.positions[j][0]
+                        py = layer.positions[j][1]
+                        pz = layer.positions[j][2]
+                        f.write("{} {} {:f} {:f} {:f} {}\n".format(atom_type, filament_index, px, py, pz, filamentname.monomer_diameter/5))
             
             atom_type = "l"
             for linker_i, linker in enumerate(filamentname.linkers):

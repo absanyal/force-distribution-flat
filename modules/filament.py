@@ -42,7 +42,7 @@ class filament:
     def __generate_filament(self):
         # Monomer circle of diameter a is inscribed in a square of side length a
         a = (self.__monomer_diameter)
-        
+
         starting_index = 1
 
         this_layer = layer(a, self.__start_pos, self.__heading, starting_index)
@@ -84,7 +84,7 @@ class filament:
         a1 = a + ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
         a2 = a - ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
 
-        l = a * R  / np.sqrt(4 * R**2 - a**2)
+        l = a * R / np.sqrt(4 * R**2 - a**2)
 
         aF = a1
         aL = self.__linker_diameter
@@ -102,29 +102,33 @@ class filament:
 
         phi3 = arccos((a - aL) / (2 * gamma))
         phi4 = pi - phi3
-     
+
         # Generate layers for linkers
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
             if has_linker:
                 p2 = self.__layers[layer_i].positions[1]
-                
+
                 linker_heading = g
-                linker_starting_pos = p2 + d * g + abs(s1) *(h+f)
-                
+                linker_starting_pos = p2 + d * g + abs(s1) * (h+f)
+
                 linker_starting_index = (
                     len(self.__layers) * 4) + (sum(self.__linker_list[:monomer_index]) * 4) + 1
 
                 linker = layer(self.__linker_diameter, linker_starting_pos,
                                linker_heading, linker_starting_index)
                 self.__linkers.append(linker)
-        
+
         # Save positions for each point on linker
         for linker_i in range(len(self.__linkers)):
             linker = self.__linkers[linker_i]
             self.linker_positions.append(linker.positions)
 
         # Create bonds and angles
+
+        linker_index = 0  # index of the linker in the list of linkers
+        # This number may be less than the number of monomers, so must be incremented by one iff has_linker is True
+
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
 
@@ -165,7 +169,7 @@ class filament:
             bond_type = 3
             self.__bonds.append([bond_type, i2, i6])
             self.__bonds.append([bond_type, i3, i7])
-            
+
             # Create angles when linkers are not involved
             angle_type = 1  # theta1
 
@@ -212,8 +216,8 @@ class filament:
 
             # Bonds and angles involving linkers
 
-            linker_index = 0  # index of the linker in the list of linkers
-            # This number may be less than the number of monomers, so must be incremented by one iff has_linker is True
+            # linker_index = 0  # index of the linker in the list of linkers
+            # # This number may be less than the number of monomers, so must be incremented by one iff has_linker is True
 
             if has_linker:
                 linker = self.__linkers[linker_index]
@@ -240,8 +244,8 @@ class filament:
                 self.__bonds.append([bond_type, i3, l4])
 
                 # Create angles when linkers are involved
-                
-                angle_type = 3 # pi/2
+
+                angle_type = 3  # pi/2
 
                 self.__angles.append([angle_type, l1, l2, l3])
                 self.__angles.append([angle_type, l2, l3, l4])
@@ -283,11 +287,11 @@ class filament:
                 self.__angles.append([angle_type, i7, l3, l2])
                 self.__angles.append([angle_type, i2, l1, l4])
                 self.__angles.append([angle_type, i3, l4, l1])
-    
+
     #############################################################################
     # Methods for the filament
     #############################################################################
-    
+
     def get_parameters(self):
         a = (self.__monomer_diameter)
         R = self._radius_of_curvature
@@ -296,7 +300,7 @@ class filament:
         a1 = a + ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
         a2 = a - ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
 
-        l = a * R  / np.sqrt(4 * R**2 - a**2)
+        l = a * R / np.sqrt(4 * R**2 - a**2)
 
         aF = a1
         aL = self.__linker_diameter
@@ -314,9 +318,9 @@ class filament:
 
         phi3 = arccos((a - aL) / (2 * gamma))
         phi4 = pi - phi3
-        
+
         return R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4
-    
+
     #############################################################################
     # Properties of the filament
     #############################################################################
@@ -364,7 +368,7 @@ class filament:
     @property
     def linkers(self):
         return self.__linkers
-    
+
     @property
     def linker_diameter(self):
         return self.__linker_diameter
@@ -388,7 +392,7 @@ class filament:
     @property
     def num_angles(self):
         return len(self.__angles)
-    
+
     @property
     def total_particles(self):
         layers_particles = 4 * len(self.__layers)
@@ -398,7 +402,7 @@ class filament:
     @property
     def heading(self):
         return self.__heading
-    
+
     @property
     def start_pos(self):
         return self.__start_pos
