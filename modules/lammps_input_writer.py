@@ -211,6 +211,30 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         #------------------------------------------------------
         
+        input_f.write("reset_timestep 0\n")
+        input_f.write("\n")
+        
+        input_f.write("variable tsteps equal time\n")
+        input_f.write("\n")
+        
+        input_f.write("dump dumpall all atom ${dump_interval_run} dump/dump.${xx}.lammpstrj\n")
+        input_f.write("\n")
+        
+        #------------------------------------------------------
+        
+
+        #------------------------------------------------------
+        
+        input_f.write("fix brnfix all brownian ${temperature} ${brownian_seed} gamma_t ${gamma_t}\n")
+        
+        input_f.write("\n")
+        
+        #------------------------------------------------------
+        
+        input_f.write("thermo ${thermo_run}\n")
+        input_f.write("run ${steps_run}\n")
+        
+        input_f.write("\n")
         
         # -----------------------------------------------------
         
