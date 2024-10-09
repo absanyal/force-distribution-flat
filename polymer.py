@@ -1,7 +1,7 @@
 import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
-from modules.save_filament_info import save_filament_info
+from modules.save_info import save_filament_info, save_box_info
 from modules.polymer_data_writer import write_polymer_data
 from modules.lammps_input_writer import write_lammps_input
 
@@ -16,7 +16,8 @@ fixed_seed = 123456
 
 data_fname_str = 'polymer.data'  # polymer data file
 input_fname_str = 'input.lammps'  # lammps input file
-info_fname_str = 'info.txt'  # info file
+filament_info_fname_str = 'info/filament_info.txt'  # filament info file
+box_info_fname_str = 'info/box_info.txt'  # box info file
 link_pos_fname_str = 'data/link_pos.txt'  # linker positions file
 end_pos_fname_str = 'data/e2e_pos.txt'  # end-to-end positions file
 com_msd_fname_str = 'data/com_msd.txt'  # CoM MSD file
@@ -41,7 +42,7 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 2
+num_monomers = 20
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
@@ -62,9 +63,7 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
 # linker_list = np.ones(num_monomers)
-linker_list = np.zeros(num_monomers)
-linker_list[0] = 1
-# linker_list[1] = 1
+linker_list = np.random.choice([0, 1], num_monomers)
 
 # Create the filament
 f1 = filament(num_monomers, monomer_diameter, start_pos, heading,
@@ -140,9 +139,9 @@ wall_interactions = [
 
 # Iteration numbers
 steps_min = 1000
-steps_run = 1000000
+steps_run = 100000
 
-thermo_min = 1000
+thermo_min = 100
 thermo_run = 1000
 
 record_interval = 1000
@@ -154,7 +153,11 @@ temperture = 310.0
 time_step = 0.00001
 
 #Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
-minimization_parameters = [0.0, 1.0e-5, 10000, 10000]
+energy_tolerance = 0.0
+force_tolerance = 1.0e-5
+max_iterations = 1000
+max_evaluations = 1000
+minimization_parameters = [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
 
 sim_parameters = [steps_min, steps_run, thermo_min, thermo_run,
                   record_interval, dump_interval_min, dump_interval_run, temperture, time_step, minimization_parameters]
@@ -175,6 +178,7 @@ brownian_parameters = [seed, gamma_t]
 
 # ----------------------------------------------------------------------------------
 # Fixes
+# Do not include Brownian fix for all atoms, it is automatically generated
 
 # Fix 1: nve/limit integration for the minimization
 fix_nve_min = ["fix_min", 0.000001]
@@ -185,12 +189,19 @@ fix_wall =[
     ["walllinker", "linker", [1500.0, 2.1, 2.1 * 2.0**(1/6)]]
 ]
 
+# ----------------------------------------------------------------------------------
+
+###################################################################################
+######################### WRITE INFO FILES ########################################
+###################################################################################
+
+# ---Filament info file---
+save_filament_info(f1, filament_info_fname_str)
+save_box_info(box_dimensions, box_info_fname_str)
+
 ###################################################################################
 ######################### WRITE POLYMER DATA ######################################
 ###################################################################################
-
-# ---Info file---
-save_filament_info(f1, info_fname_str)
 
 # ---Data file---
 write_polymer_data(f1, box_dimensions, mass, bond_styles,
