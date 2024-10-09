@@ -2,6 +2,11 @@ nres=1
 
 mkdir -p plots
 mkdir -p data
+mkdir -p dump
+mkdir -p e2e_pos
+mkdir -p com_pos
+mkdir -p link_pos
+mkdir -p info
 
 echo "variable xx uloop $nres" > in.variables
 echo >> in.variables
