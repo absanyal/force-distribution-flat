@@ -382,10 +382,6 @@ class filament:
         return len(self.__layers)
 
     @property
-    def num_linkers(self):
-        return len(self.__linkers)
-
-    @property
     def num_bonds(self):
         return len(self.__bonds)
 
