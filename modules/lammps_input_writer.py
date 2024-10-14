@@ -222,14 +222,40 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         #------------------------------------------------------
         
-
-        #------------------------------------------------------
-        
         input_f.write("fix brnfix all brownian ${temperature} ${brownian_seed} gamma_t ${gamma_t}\n")
         
         input_f.write("\n")
         
         #------------------------------------------------------
+        
+        for linker_i, linker in enumerate(filament_name.linkers):
+            input_f.write("# Linker {}\n".format(linker_i+1))
+            for atom_i in range(len(linker.positions)):
+                atom_index = linker.indices[atom_i]
+                input_f.write("variable l{}a{}x equal x[{}]\n".format(linker_i+1, atom_i+1, atom_index))
+                input_f.write("variable l{}a{}y equal y[{}]\n".format(linker_i+1, atom_i+1, atom_index))
+                input_f.write("variable l{}a{}z equal z[{}]\n".format(linker_i+1, atom_i+1, atom_index))
+                input_f.write("\n")
+                
+            input_f.write("variable l{}x equal (v_l{}a1x+v_l{}a2x+v_l{}a3x+v_l{}a4x)/4\n".format(linker_i+1, linker_i+1, linker_i+1, linker_i+1, linker_i+1))
+            input_f.write("variable l{}y equal (v_l{}a1y+v_l{}a2y+v_l{}a3y+v_l{}a4y)/4\n".format(linker_i+1, linker_i+1, linker_i+1, linker_i+1, linker_i+1))
+            input_f.write("variable l{}z equal (v_l{}a1z+v_l{}a2z+v_l{}a3z+v_l{}a4z)/4\n".format(linker_i+1, linker_i+1, linker_i+1, linker_i+1, linker_i+1))
+            
+            input_f.write("\n")
+        
+        
+        input_f.write("\n")
+        #------------------------------------------------------
+        
+        input_f.write("fix printlinkers all print ${record_interval} \"${tsteps} ")
+        for linker_i, linker in enumerate(filament_name.linkers):
+            input_f.write("${{l{}x}} ${{l{}y}} ${{l{}z}} ".format(linker_i+1, linker_i+1, linker_i+1))
+        
+        input_f.write("\" file link_pos/link_pos.${xx}.txt screen no\n")
+        
+        input_f.write("\n")
+        
+        #-------------------------------------------------------
         
         input_f.write("thermo ${thermo_run}\n")
         input_f.write("run ${steps_run}\n")
