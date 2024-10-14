@@ -83,7 +83,7 @@ pi_by_2 = 90
 # Particle types
 mass = [
     [1, 1.0, "monomer_vertex"],
-    [2, 1.0, "linker_vertex"]
+    [2, 0.25, "linker_vertex"]
 ]
 
 # Bond styles: Bond type, Bond style, k, r0
