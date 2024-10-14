@@ -11,7 +11,7 @@ module load cuda
 
 module load miniforge3/24.3.0-0
 
-python3 polymer.py
+python3 live.polymer.py
 
 #number of resources
 #nres=`echo "$LSB_DJOB_NUMPROC-1" | bc`
