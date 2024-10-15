@@ -108,7 +108,6 @@ angle_styles = [
 ]
 
 # Pair coefficients for hybrid style
-# -1 is a placeholder for the pair style zero
 pair_coeff = [
     [1, 1, "zero", []],
     [2, 2, "zero", []],
