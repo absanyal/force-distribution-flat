@@ -127,12 +127,6 @@ groups = [
     [2, "linker"]
 ]
 
-# Wall-atom interactions, all assumed to be LJ type in format epsilon, sigma, cutoff
-wall_interactions = [
-    ["wallchain", "chain", "lj93", [5.0, 2.5, 2.5]],
-    ["walllinker", "linker", "lj93", [5.0, 2.5, 2.5]]
-]
-
 ###################################################################################
 ######################### Simulation parameters ###################################
 ###################################################################################
@@ -152,12 +146,13 @@ dump_interval_run = 1000
 temperture = 310.0
 time_step = 0.00001
 
-#Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
+# Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
 energy_tolerance = 0.0
 force_tolerance = 1.0e-5
 max_iterations = 1000
 max_evaluations = 1000
-minimization_parameters = [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
+minimization_parameters = [energy_tolerance,
+                           force_tolerance, max_iterations, max_evaluations]
 
 sim_parameters = [steps_min, steps_run, thermo_min, thermo_run,
                   record_interval, dump_interval_min, dump_interval_run, temperture, time_step, minimization_parameters]
@@ -184,7 +179,7 @@ brownian_parameters = [seed, gamma_t]
 fix_nve_min = ["fix_min", 0.000001]
 
 # Fix 2: wall-atom LJ interactions
-fix_wall =[
+fix_wall = [
     ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.0**(1/6)]],
     ["walllinker", "linker", [1500.0, 2.1, 2.1 * 2.0**(1/6)]]
 ]
@@ -212,5 +207,5 @@ write_polymer_data(f1, box_dimensions, mass, bond_styles,
 ###################################################################################
 
 # ---LAMMPS input file---
-write_lammps_input(filament_name=f1, box_dimensions=box_dimensions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, wall_interactions=wall_interactions,
-                   sim_parameters=sim_parameters, folders=folders, brownian_parameters=brownian_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_wall=fix_wall)
+write_lammps_input(filament_name=f1, box_dimensions=box_dimensions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
+                   folders=folders, brownian_parameters=brownian_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_wall=fix_wall)
