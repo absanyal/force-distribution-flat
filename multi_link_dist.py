@@ -26,6 +26,7 @@ fraction_to_skip_before_recording = 0.1
 
 ################################# READ DATA ###############################################
 
+# Read the box dimensions to create the cell, read filament info
 cell = make_box(cell_info_file)
 try:
     R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4, num_monomers, num_layers, num_total_particles, num_linkers, num_bonds, num_angles = np.loadtxt(
@@ -36,6 +37,11 @@ except FileNotFoundError:
 
 num_monomers = int(num_monomers)
 num_linkers = int(num_linkers)
+
+# --------------------------------------------------------------------------------------------
+# The index of the run being analyzed is passed as an argument to the script
+# Checking if the correct number of arguments are provided and if the run index is an integer
+# Also checking if the file exists for the run index provided
 
 if len(argv) == 1:
     raise ValueError('Please provide a run index.')
@@ -58,8 +64,13 @@ except FileNotFoundError:
     raise FileNotFoundError(
         'File index {} not found in link_pos directory.'.format(run_i))
 
+# --------------------------------------------------------------------------------------------
+
+# The first row of the data file contains the time steps
 t_list = raw_data[0]
 num_iterations = len(t_list)
+
+# Averages are calculated after this many iterations have passed
 recording_start_index = int(fraction_to_skip_before_recording * num_iterations)
 
 ################################# ANALYSIS ###############################################
@@ -109,6 +120,7 @@ if plot_traces:
 
 # ----------------- Number of linkers attached -----------------
 
+# Count the number of linkers attached at each time step
 num_attached = np.zeros(num_iterations)
 
 for t_i in range(num_iterations):
@@ -118,11 +130,13 @@ for t_i in range(num_iterations):
         if s < threshold:
             num_attached[t_i] += 1
 
+# Calculate the average number of attached linkers
 avg_num_attached = np.mean(num_attached[recording_start_index:])
 
 fraction_attached = num_attached / num_linkers
 avg_fraction_attached = avg_num_attached / num_linkers
 
+# Plot the number of attached linkers
 if plot_num_attached:
 
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
