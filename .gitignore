@@ -2,6 +2,7 @@
 
 !.gitignore
 !modules/
+!analysis_modules/
 !*.py
 !submit_*.sh
 
