@@ -10,7 +10,13 @@ old.*
 modules/old.*
 test_files/*
 old_files/*
+data/*
+link_pos/*
+e2e_pos/*
+com_pos/*
+plots/*
 info/*
 test*
 template.*
 live.*
+tmp.*
