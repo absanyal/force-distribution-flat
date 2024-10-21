@@ -21,7 +21,7 @@ smoothing_window = 11
 detection_window = 21
 threshold = 0.2
 hitting_distance = 2.0
-fraction_to_skip_before_recording = 0.1
+fraction_to_skip_before_recording = 0.2
 
 
 ################################# READ DATA ###############################################
@@ -112,9 +112,10 @@ if plot_traces:
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'$\Delta s_{\mathrm{linker}}$ (nm)')
     ax.set_xlim([t_list[0], t_list[-1]])
+    ax.set_ylim(bottom=0)
 
-    ax.axhline(hitting_distance, color='black',
-               linestyle='--', label='Hitting distance')
+    # ax.axhline(hitting_distance, color='black',
+    #            linestyle='--', label='Hitting distance')
 
     plt.savefig('plots/linker_distances.{}.pdf'.format(run_i), dpi=300)
 
@@ -141,20 +142,20 @@ if plot_num_attached:
 
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
 
-    # ax.plot(t_list, num_attached, label='Number of attached linkers', linewidth=1.0, color='k')
-    ax.plot(t_list, fraction_attached, label='Fraction of attached linkers', linewidth=0.5, color='k')
+    ax.plot(t_list, num_attached, linewidth=1.0, color='k')
+    # ax.plot(t_list, fraction_attached, label='Fraction of attached linkers', linewidth=0.5, color='k')
 
     ax.set_xlabel(r'$t/\tau$')
-    ax.set_ylabel(r'$N_{\mathrm{attached}} / N_{\mathrm{linkers}}$')
+    ax.set_ylabel(r'$N_{\mathrm{attached}}$')
     ax.set_xlim([t_list[0], t_list[-1]])
 
-    # ax.axhline(avg_num_attached, color='r', linestyle='--',
-    #            linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
-    ax.axhline(avg_fraction_attached, color='r', linestyle='--', linewidth=0.5, label='Average fraction: {:.2f}'.format(avg_fraction_attached))
+    ax.axhline(avg_num_attached, color='r', linestyle='--',
+               linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
+    # ax.axhline(avg_fraction_attached, color='r', linestyle='--', linewidth=0.5, label='Average fraction: {:.2f}'.format(avg_fraction_attached))
 
-    ax.legend()
+    ax.legend(loc='upper right')
     plt.savefig('plots/num_attached.{}.pdf'.format(run_i), dpi=300)
-    
+
     with open('data/num_attached.{}.txt'.format(run_i), 'w') as f:
         f.write('# avg_num_attached \t avg_fraction_attached\n')
         f.write('{} \t {}'.format(avg_num_attached, avg_fraction_attached))
