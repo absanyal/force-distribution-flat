@@ -25,7 +25,7 @@ class filament:
         self.__linker_list = linker_list
         self.__linker_distance = linker_distance
         self.__linker_diameter = linker_diameter
-        self.__num_linkers = len(linker_list)
+        self.__num_linkers = sum(linker_list)
         self.__linkers = []
         self.linker_positions = []
 
