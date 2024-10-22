@@ -18,10 +18,6 @@ data_fname_str = 'polymer.data'  # polymer data file
 input_fname_str = 'input.lammps'  # lammps input file
 filament_info_fname_str = 'info/filament_info.txt'  # filament info file
 box_info_fname_str = 'info/box_info.txt'  # box info file
-link_pos_fname_str = 'data/link_pos.txt'  # linker positions file
-end_pos_fname_str = 'data/e2e_pos.txt'  # end-to-end positions file
-com_msd_fname_str = 'data/com_msd.txt'  # CoM MSD file
-com_pos_fname_str = 'data/com_pos.txt'  # CoM positions file
 
 ###################################################################################
 ######################### BOX DIMENSIONS ##########################################
@@ -49,8 +45,8 @@ linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-# distance_from_axis = 325
-distance_from_axis = 0
+distance_from_axis = -328
+# distance_from_axis = 0
 
 # Angle of the filament with the wall
 angle = 90
@@ -64,6 +60,7 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 # Linker list
 # linker_list = np.ones(num_monomers)
 linker_list = np.random.choice([0, 1], num_monomers)
+# linker_list = [(i % 2) for i in range(num_monomers)]
 
 # Create the filament
 f1 = filament(num_monomers, monomer_diameter, start_pos, heading,
@@ -88,12 +85,12 @@ mass = [
 
 # Bond styles: Bond type, Bond style, k, r0
 bond_styles = [
-    [1, "harmonic", 1500.0, a],
-    [2, "harmonic", 1500.0, a2],
-    [3, "harmonic", 1500.0, a1],
-    [4, "harmonic", 1500.0, 2 * l],
-    [5, "harmonic", 1500.0, gamma],
-    [6, "harmonic", 1500.0, aL]
+    [1, "harmonic", 15000.0, a],
+    [2, "harmonic", 15000.0, a2],
+    [3, "harmonic", 15000.0, a1],
+    [4, "harmonic", 15000.0, 2 * l],
+    [5, "harmonic", 15000.0, gamma],
+    [6, "harmonic", 15000.0, aL]
 ]
 
 # Angle styles: Angle type, Angle style, k, theta0
@@ -131,15 +128,15 @@ groups = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 1000
-steps_run = 100000
+steps_min = 2000
+steps_run = 300000
 
 thermo_min = 100
-thermo_run = 1000
+thermo_run = 10000
 
 record_interval = 1000
 
-dump_interval_min = 1
+dump_interval_min = 100
 dump_interval_run = 1000
 
 temperture = 310.0
@@ -179,7 +176,7 @@ fix_nve_min = ["fix_min", 0.000001]
 
 # Fix 2: wall-atom LJ interactions
 fix_wall = [
-    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.0**(1/6)]],
+    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.1**(1/6)]],
     ["walllinker", "linker", [1500.0, 2.1, 2.1 * 2.0**(1/6)]]
 ]
 
