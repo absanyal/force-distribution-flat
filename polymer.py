@@ -1,7 +1,7 @@
 import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
-from modules.save_info import save_filament_info, save_box_info
+from modules.save_info import save_filament_info, save_box_info, save_linker_distribution
 from modules.polymer_data_writer import write_polymer_data
 from modules.lammps_input_writer import write_lammps_input
 
@@ -18,6 +18,8 @@ data_fname_str = 'polymer.data'  # polymer data file
 input_fname_str = 'input.lammps'  # lammps input file
 filament_info_fname_str = 'info/filament_info.txt'  # filament info file
 box_info_fname_str = 'info/box_info.txt'  # box info file
+# linker distribution file
+linker_distribution_fname_str = 'info/linker_distribution.txt'
 
 ###################################################################################
 ######################### BOX DIMENSIONS ##########################################
@@ -59,8 +61,8 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
 # linker_list = np.ones(num_monomers)
-linker_list = np.random.choice([0, 1], num_monomers)
-# linker_list = [(i % 2) for i in range(num_monomers)]
+# linker_list = np.random.choice([0, 1], num_monomers)
+linker_list = [((i+1) % 2) for i in range(num_monomers)]
 
 # Create the filament
 f1 = filament(num_monomers, monomer_diameter, start_pos, heading,
@@ -129,7 +131,7 @@ groups = [
 
 # Iteration numbers
 steps_min = 2000
-steps_run = 300000
+steps_run = 30000
 
 thermo_min = 100
 thermo_run = 10000
@@ -189,6 +191,7 @@ fix_wall = [
 # ---Filament info file---
 save_filament_info(f1, filament_info_fname_str)
 save_box_info(box_dimensions, box_info_fname_str)
+save_linker_distribution(f1, linker_distribution_fname_str)
 
 ###################################################################################
 ######################### WRITE POLYMER DATA ######################################
