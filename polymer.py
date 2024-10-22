@@ -47,7 +47,7 @@ linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = -328
+distance_from_axis = 328
 # distance_from_axis = 0
 
 # Angle of the filament with the wall
@@ -55,7 +55,7 @@ angle = 90
 angle = np.radians(angle)  # Converts to radians, do not change this line
 
 # Calculating the start position and heading of the filament
-start_pos = [(xhi - xlo)/2.0 + distance_from_axis,
+start_pos = [(xhi - xlo)/2.0 - distance_from_axis,
              (yhi - ylo)/2.0, (zhi - zlo)/2.0]
 heading = [0, np.cos(angle), -np.sin(angle)]
 
