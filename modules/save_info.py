@@ -1,5 +1,4 @@
 import numpy as np
-from modules.angle import filter_angle
 from modules.filament import filament
 
 def save_filament_info(filament_name: filament, info_file_name: str):
@@ -58,3 +57,13 @@ def save_box_info(box_dimensions: list, info_file_name: str):
         info_file.write("{:.4f} \t".format(x_width))
         info_file.write("{:.4f} \t".format(y_width))
         info_file.write("{:.4f} \n".format(z_width))
+
+def save_linker_distribution(f1: filament, info_file_name: str):
+    linker_distribution = f1.linker_list
+    linker_distribution = np.array(linker_distribution)
+    
+    with open(info_file_name, 'w') as info_file:
+        info_file.write("#Linker distribution\n")
+        
+        for i in range(len(linker_distribution)):
+            info_file.write("{} \n".format(linker_distribution[i]))
