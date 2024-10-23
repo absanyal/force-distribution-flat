@@ -153,7 +153,7 @@ if plot_traces:
 
 # ----------------- PROXIMITY TO SURFACE ----------------------
 
-target_list = distances_list
+target_list = distances_smooth_list
 
 proximity_list = np.zeros((num_iterations, num_monomers))
 minimum_nonzero_proximity = abs(
@@ -187,7 +187,7 @@ if plot_proximity:
 
 # ----------------- ATTACHMENT STATUS PER LINKER ----------------------
 
-target_list = distances_smooth_list
+target_list = detection_smooth_list
 
 attachment_status = np.zeros((num_iterations, num_monomers))
 for t_i in range(num_iterations):
