@@ -16,6 +16,8 @@ filament_info_file = 'info/filament_info.txt'
 plot_traces = 1
 plot_proximity = 1
 plot_num_attached = 1
+plot_attachment_status = 1
+plot_attached_segment_length = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 smoothing_window = 11
@@ -144,6 +146,10 @@ if plot_traces:
     #            linestyle='--', label='Hitting distance')
 
     plt.savefig('plots/linker_distances.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
 
 # ----------------- PROXIMITY TO SURFACE ----------------------
 
@@ -177,8 +183,42 @@ if plot_proximity:
     ax.set_ylim([1, num_monomers+1])
 
     plt.savefig('plots/proximity.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
 
-# ----------------- Number of linkers attached -----------------
+# ----------------- ATTCHMENT STATUS PER LINKER ----------------------
+
+target_list = detection_smooth_list.copy()
+
+attachment_status = np.zeros((num_iterations, num_monomers))
+for t_i in range(num_iterations):
+    for l_i in range(num_linkers):
+        s_i = segment_id[l_i]
+        s = abs(target_list[t_i, l_i] -
+                hitting_distance) / hitting_distance
+        if s < threshold:
+            attachment_status[t_i, s_i] = 1.0
+
+if plot_attachment_status:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    
+    ax.imshow(attachment_status.T, aspect='auto', cmap='binary', origin='lower', extent=
+                [t_list[0], t_list[-1], 1, num_monomers+1])
+    
+    ax.set_xlabel(r'$t/\tau$')
+    ax.set_ylabel(r'Attachment status')
+    
+    ax.set_xlim([t_list[0], t_list[-1]])
+    
+    plt.savefig('plots/attachment_status.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
+
+# ----------------- NUMBER OF ATTACHED LINKERS ----------------------
 
 # Count the number of linkers attached at each time step
 num_attached = np.zeros(num_iterations)
@@ -222,6 +262,10 @@ if plot_num_attached:
 
     ax.legend(loc='upper right')
     plt.savefig('plots/num_attached.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
 
     with open('data/num_attached.{}.txt'.format(run_i), 'w') as f:
         f.write('# avg_num_attached \t avg_fraction_attached\n')
