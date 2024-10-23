@@ -187,7 +187,7 @@ if plot_proximity:
 
 # ----------------- ATTACHMENT STATUS PER LINKER ----------------------
 
-target_list = detection_smooth_list
+target_list = distances_smooth_list
 
 attachment_status = np.zeros((num_iterations, num_monomers))
 for t_i in range(num_iterations):
@@ -195,7 +195,7 @@ for t_i in range(num_iterations):
         s_i = segment_id[l_i]
         s = abs(target_list[t_i, l_i] -
                 hitting_distance) / hitting_distance
-        if s < threshold:
+        if s <= threshold:
             attachment_status[t_i, s_i] = 1.0
 
 if plot_attachment_status:
@@ -208,6 +208,42 @@ if plot_attachment_status:
     ax.set_ylabel(r'Attachment status')
     
     plt.savefig('plots/attachment_status.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
+
+# ----------------- ATTACHED SEGMENT LENGTH ----------------------
+
+attached_segment_length = np.zeros(num_iterations)
+
+for t_i in range(num_iterations):
+    attached_segement_indices = np.where(attachment_status[t_i] == 1.0)[0]
+    if len(attached_segement_indices) != 0:
+        first_index = attached_segement_indices[0]
+        last_index = attached_segement_indices[-1]
+        attached_segment_length[t_i] = last_index - first_index + 1
+    else:
+        attached_segment_length[t_i] = 0
+
+average_attached_segment_length = np.mean(attached_segment_length[recording_start_index:])
+maximal_attached_segment_length = np.max(attached_segment_length)
+    
+if plot_attached_segment_length:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    
+    ax.plot(t_list, attached_segment_length, linewidth=1.0, color='k')
+    
+    ax.axhline(average_attached_segment_length, color='r', linestyle='--', linewidth=0.5, label='Average: {:.2f}'.format(average_attached_segment_length))
+    ax.axhline(maximal_attached_segment_length, color='b', linestyle='--', linewidth=0.5, label='Maximum: {}'.format(maximal_attached_segment_length))
+    
+    ax.set_xlabel(r'$t/\tau$')
+    ax.set_ylabel(r'Attached segment length')
+    ax.set_xlim([t_list[0], t_list[-1]])
+    
+    ax.legend(loc='upper right')
+    
+    plt.savefig('plots/attached_segment_length.{}.pdf'.format(run_i), dpi=300)
     
     plt.clf()
     plt.cla()
