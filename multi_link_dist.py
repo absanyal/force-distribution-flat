@@ -18,10 +18,25 @@ plot_num_attached = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 smoothing_window = 11
-detection_window = 21
+detection_window = 51
 threshold = 0.2
 hitting_distance = 2.0
-fraction_to_skip_before_recording = 0.2
+fraction_to_skip_before_recording = 0.05
+
+if smoothing_window % 2 == 0:
+    raise ValueError('Smoothing window must be an odd number.')
+
+if detection_window % 2 == 0:
+    raise ValueError('Detection window must be an odd number.')
+
+if threshold < 0 or threshold > 1:
+    raise ValueError('Threshold must be between 0 and 1.')
+
+if hitting_distance < 0:
+    raise ValueError('Hitting distance must be non-negative.')
+
+if fraction_to_skip_before_recording < 0 or fraction_to_skip_before_recording > 1:
+    raise ValueError('Fraction of iterations to skip before recording must be between 0 and 1.')
 
 
 ################################# READ DATA ###############################################
@@ -137,6 +152,9 @@ avg_num_attached = np.mean(num_attached[recording_start_index:])
 fraction_attached = num_attached / num_linkers
 avg_fraction_attached = avg_num_attached / num_linkers
 
+# Maximum number of attached linkers
+max_num_attached = np.max(num_attached)
+
 # Plot the number of attached linkers
 if plot_num_attached:
 
@@ -151,7 +169,13 @@ if plot_num_attached:
 
     ax.axhline(avg_num_attached, color='r', linestyle='--',
                linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
+    ax.axhline(max_num_attached, color='b', linestyle='--',
+               linewidth=0.5, label='Maximum: {}'.format(max_num_attached))
+    
+    
     # ax.axhline(avg_fraction_attached, color='r', linestyle='--', linewidth=0.5, label='Average fraction: {:.2f}'.format(avg_fraction_attached))
+    
+    # ax.grid(axis='y', linestyle='--', linewidth=0.5, color='gray', which='major')
 
     ax.legend(loc='upper right')
     plt.savefig('plots/num_attached.{}.pdf'.format(run_i), dpi=300)
