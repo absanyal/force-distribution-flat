@@ -14,6 +14,7 @@ filament_info_file = 'info/filament_info.txt'
 # ----------------- PLOT TOGGLES ------------------------
 
 plot_traces = 1
+plot_proximity = 1
 plot_num_attached = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
@@ -36,7 +37,8 @@ if hitting_distance < 0:
     raise ValueError('Hitting distance must be non-negative.')
 
 if fraction_to_skip_before_recording < 0 or fraction_to_skip_before_recording > 1:
-    raise ValueError('Fraction of iterations to skip before recording must be between 0 and 1.')
+    raise ValueError(
+        'Fraction of iterations to skip before recording must be between 0 and 1.')
 
 
 ################################# READ DATA ###############################################
@@ -90,11 +92,20 @@ recording_start_index = int(fraction_to_skip_before_recording * num_iterations)
 
 ################################# ANALYSIS ###############################################
 
+# ----------------- Assign segments to linkers -----------------
+
+segment_id = []
+linker_distribution = np.loadtxt('info/linker_distribution.txt')
+for i in range(num_monomers):
+    if linker_distribution[i] == 1:
+        segment_id.append(i)
+
+
 # ----------------- DISTANCE FROM SURFACE -----------------
 
-distances = np.zeros((num_iterations, num_linkers))
-distances_smooth = np.zeros_like(distances)
-detection_smooth = np.zeros_like(distances)
+distances_list = np.zeros((num_iterations, num_linkers))
+distances_smooth_list = np.zeros_like(distances_list)
+detection_smooth_list = np.zeros_like(distances_list)
 
 # Save the distances from the surface for each linker at each time step
 for t_i, t in enumerate(t_list):
@@ -105,14 +116,14 @@ for t_i, t in enumerate(t_list):
 
         rP = [x, y, z]
         dist = distance_from_surface(cell, rP)
-        distances[t_i, l_i] = dist
+        distances_list[t_i, l_i] = dist
 
 # Smoothen the distances
 for l_i in range(num_linkers):
-    distances_smooth[:, l_i] = moving_average(
-        distances[:, l_i], smoothing_window, padding='edge')
-    detection_smooth[:, l_i] = moving_average(
-        distances[:, l_i], detection_window, padding='edge')
+    distances_smooth_list[:, l_i] = moving_average(
+        distances_list[:, l_i], smoothing_window, padding='edge')
+    detection_smooth_list[:, l_i] = moving_average(
+        distances_list[:, l_i], detection_window, padding='edge')
 
 
 # Plot the distances
@@ -121,7 +132,7 @@ if plot_traces:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
 
     for l_i in range(num_linkers):
-        ax.plot(t_list, distances_smooth[:, l_i], label='Linker {}'.format(
+        ax.plot(t_list, distances_smooth_list[:, l_i], label='Linker {}'.format(
             l_i+1), linewidth=0.5)
 
     ax.set_xlabel(r'$t/\tau$')
@@ -134,6 +145,39 @@ if plot_traces:
 
     plt.savefig('plots/linker_distances.{}.pdf'.format(run_i), dpi=300)
 
+# ----------------- PROXIMITY TO SURFACE ----------------------
+
+target_list = distances_list.copy()
+
+proximity_list = np.zeros((num_iterations, num_monomers))
+minimum_nonzero_proximity = abs(
+    cell.radius - np.max(distances_list[np.nonzero(target_list)])) / cell.radius
+maximum_proximity = abs(cell.radius - np.min(target_list)) / cell.radius
+
+        
+
+# Calculate the proximity of each linker to the surface
+for t_i in range(num_iterations):
+    for l_i in range(num_linkers):
+        s_i = segment_id[l_i]
+        proximity = abs(cell.radius - target_list[t_i, l_i]) / cell.radius
+        proximity_list[t_i, s_i] = proximity
+
+if plot_proximity:
+
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+
+    im = ax.imshow(proximity_list.T, aspect='auto', cmap='plasma', origin='lower', interpolation='None', extent=[
+              t_list[0], t_list[-1], 1, num_monomers+1], vmin=minimum_nonzero_proximity, vmax=maximum_proximity)
+
+    ax.set_xlabel(r'$t/\tau$')
+    ax.set_ylabel(r'Proximity to surface')
+
+    ax.set_xlim([t_list[0], t_list[-1]])
+    ax.set_ylim([1, num_monomers+1])
+
+    plt.savefig('plots/proximity.{}.pdf'.format(run_i), dpi=300)
+
 # ----------------- Number of linkers attached -----------------
 
 # Count the number of linkers attached at each time step
@@ -141,7 +185,7 @@ num_attached = np.zeros(num_iterations)
 
 for t_i in range(num_iterations):
     for l_i in range(num_linkers):
-        s = abs(detection_smooth[t_i, l_i] -
+        s = abs(detection_smooth_list[t_i, l_i] -
                 hitting_distance) / hitting_distance
         if s < threshold:
             num_attached[t_i] += 1
@@ -171,10 +215,9 @@ if plot_num_attached:
                linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
     ax.axhline(max_num_attached, color='b', linestyle='--',
                linewidth=0.5, label='Maximum: {}'.format(max_num_attached))
-    
-    
+
     # ax.axhline(avg_fraction_attached, color='r', linestyle='--', linewidth=0.5, label='Average fraction: {:.2f}'.format(avg_fraction_attached))
-    
+
     # ax.grid(axis='y', linestyle='--', linewidth=0.5, color='gray', which='major')
 
     ax.legend(loc='upper right')
