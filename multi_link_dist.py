@@ -179,9 +179,6 @@ if plot_proximity:
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'Proximity to surface')
 
-    ax.set_xlim([t_list[0], t_list[-1]])
-    ax.set_ylim([1, num_monomers+1])
-
     plt.savefig('plots/proximity.{}.pdf'.format(run_i), dpi=300)
     
     plt.clf()
@@ -209,8 +206,6 @@ if plot_attachment_status:
     
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'Attachment status')
-    
-    ax.set_xlim([t_list[0], t_list[-1]])
     
     plt.savefig('plots/attachment_status.{}.pdf'.format(run_i), dpi=300)
     
