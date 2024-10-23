@@ -185,7 +185,7 @@ if plot_proximity:
     plt.cla()
     ax.cla()
 
-# ----------------- ATTCHMENT STATUS PER LINKER ----------------------
+# ----------------- ATTACHMENT STATUS PER LINKER ----------------------
 
 target_list = detection_smooth_list
 
@@ -215,12 +215,14 @@ if plot_attachment_status:
 
 # ----------------- NUMBER OF ATTACHED LINKERS ----------------------
 
+target_list = detection_smooth_list
+
 # Count the number of linkers attached at each time step
 num_attached = np.zeros(num_iterations)
 
 for t_i in range(num_iterations):
     for l_i in range(num_linkers):
-        s = abs(detection_smooth_list[t_i, l_i] -
+        s = abs(target_list[t_i, l_i] -
                 hitting_distance) / hitting_distance
         if s < threshold:
             num_attached[t_i] += 1
