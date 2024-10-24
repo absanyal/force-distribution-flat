@@ -3,6 +3,7 @@
 !.gitignore
 !modules/
 !analysis_modules/
+!extra-codes/
 !*.py
 !submit_*.sh
 
