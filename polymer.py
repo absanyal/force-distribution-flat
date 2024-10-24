@@ -40,14 +40,14 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 20
+num_monomers = 14
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = 328
+distance_from_axis = 332
 # distance_from_axis = 0
 
 # Angle of the filament with the wall
@@ -62,7 +62,20 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 # Linker list
 # linker_list = np.ones(num_monomers)
 # linker_list = np.random.choice([0, 1], num_monomers)
-linker_list = [((i+1) % 2) for i in range(num_monomers)]
+
+linker_list = []
+for i in range(num_monomers):
+    if i % 2 == 0:
+        linker_list.append(1)
+    else:
+        linker_list.append(0)
+        
+# linker_list = np.zeros(num_monomers)
+# gap = 6
+# shift = 3
+# midpoint = num_monomers // 2
+# linker_list[midpoint - shift] = 1
+# linker_list[midpoint - shift + gap] = 1
 
 # Create the filament
 f1 = filament(num_monomers, monomer_diameter, start_pos, heading,
@@ -131,7 +144,7 @@ groups = [
 
 # Iteration numbers
 steps_min = 2000
-steps_run = 30000
+steps_run = 5000000
 
 thermo_min = 100
 thermo_run = 10000
