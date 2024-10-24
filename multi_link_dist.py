@@ -173,11 +173,11 @@ if plot_proximity:
 
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
 
-    im = ax.imshow(proximity_list.T, aspect='auto', cmap='plasma', origin='lower', interpolation='None', extent=[
+    im = ax.imshow(proximity_list.T, aspect='auto', cmap='magma', origin='lower', interpolation='None', extent=[
               t_list[0], t_list[-1], 1, num_monomers+1], vmin=minimum_nonzero_proximity, vmax=maximum_proximity)
 
     ax.set_xlabel(r'$t/\tau$')
-    ax.set_ylabel(r'Proximity to surface')
+    ax.set_ylabel(r'Monomer index')
 
     plt.savefig('plots/proximity.{}.pdf'.format(run_i), dpi=300)
     
@@ -201,11 +201,11 @@ for t_i in range(num_iterations):
 if plot_attachment_status:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
     
-    ax.imshow(attachment_status.T, aspect='auto', cmap='binary', origin='lower', extent=
+    ax.imshow(attachment_status.T, aspect='auto', cmap='magma', origin='lower', extent=
                 [t_list[0], t_list[-1], 1, num_monomers+1])
     
     ax.set_xlabel(r'$t/\tau$')
-    ax.set_ylabel(r'Attachment status')
+    ax.set_ylabel(r'Monomer index')
     
     plt.savefig('plots/attachment_status.{}.pdf'.format(run_i), dpi=300)
     
