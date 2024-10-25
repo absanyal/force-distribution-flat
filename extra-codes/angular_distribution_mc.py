@@ -3,17 +3,19 @@ import matplotlib.pyplot as plt
 import rcparams
 
 from numpy import sin, cos, pi
+from scipy.signal import find_peaks
 
 Rc = 350
 R0 = 100
+r_mono = 2.5
 
 T = 1
 beta = 1.0 / T
 
-n = 1
+n = 10
 
 Bs = 1000
-Lb = 5 * n
+Lb = 2 * r_mono * n
 
 
 N_iters = 1000000
@@ -54,4 +56,4 @@ ax1.hist(theta_list, bins='auto', density=True, color='b')
 ax2.clear()
 ax2.hist(theta_list, bins='auto', density=True, color='b')
 
-plt.savefig("plot.png")
+plt.savefig("angular_distribution_mc.pdf")
