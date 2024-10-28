@@ -240,6 +240,7 @@ if plot_attached_segment_length:
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'Attached segment length')
     ax.set_xlim([t_list[0], t_list[-1]])
+    ax.set_ylim(bottom=0)
     
     ax.legend(loc='upper right')
     
@@ -283,6 +284,7 @@ if plot_num_attached:
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'$N_{\mathrm{attached}}$')
     ax.set_xlim([t_list[0], t_list[-1]])
+    ax.set_ylim(bottom=0)
 
     ax.axhline(avg_num_attached, color='r', linestyle='--',
                linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
