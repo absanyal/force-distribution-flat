@@ -228,6 +228,8 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         #------------------------------------------------------
         
+        ########### PRINT ALL LINKER POSITIONS ################
+        
         for linker_i, linker in enumerate(filament_name.linkers):
             input_f.write("# Linker {}\n".format(linker_i+1))
             for atom_i in range(len(linker.positions)):
@@ -255,7 +257,17 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         input_f.write("\n")
         
-        #-------------------------------------------------------
+        # -----------------------------------------------------
+        
+        ########### PRINT ALL MONOMER POSITIONS ################
+        
+        for layer_i in range(num_layers - 1):
+            layer_1 = filament_name.layers[layer_i]
+            layer_2 = filament_name.layers[layer_i + 1]
+            
+            layer_index_1 = layer_1.indices[0]
+        
+        # -----------------------------------------------------
         
         input_f.write("thermo ${thermo_run}\n")
         input_f.write("run ${steps_run}\n")
