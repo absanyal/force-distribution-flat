@@ -10,7 +10,9 @@ Rb = 350
 r_mono = 2.5
 # Bs = 10000
 N_list = np.arange(2, 100)
-Bs_list = np.linspace(30000, 40000, len(N_list))
+Bs_list = np.linspace(30000, 40000, 100)
+
+normalize_lengths = 1
 
 total_points_to_compute = len(Bs_list) * len(N_list)
 
@@ -32,7 +34,9 @@ for Bs_i, Bs in enumerate(Bs_list):
 
         p_list = p_list / Z
 
-        average_n = np.sum(n_list * p_list) / N
+        average_n = np.sum(n_list * p_list)
+        if normalize_lengths:
+            average_n = average_n / N
         
         Bs_N_matrix[Bs_i, N_i] = average_n
         
@@ -43,7 +47,10 @@ for Bs_i, Bs in enumerate(Bs_list):
 
 plt.figure()
 
-plt.imshow(Bs_N_matrix, aspect='auto', origin='lower', extent=[N_list[0], N_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma', vmin=0, vmax=1)
+if normalize_lengths:
+    plt.imshow(Bs_N_matrix, aspect='auto', origin='lower', extent=[N_list[0], N_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma', vmin=0, vmax=1)
+else:
+    plt.imshow(Bs_N_matrix, aspect='auto', origin='lower', extent=[N_list[0], N_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma')
 
 plt.colorbar()
 
