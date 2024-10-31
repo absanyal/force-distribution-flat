@@ -62,6 +62,8 @@ else:
 
 plt.colorbar()
 
+plt.title(r'$E_{{\mathrm{{bind}}}}^0 = {}$'.format(Ebind0))
+
 plt.xlabel(r'$N$')
 plt.ylabel(r'$B_s$')
 
