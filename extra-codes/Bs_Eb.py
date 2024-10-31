@@ -7,7 +7,7 @@ beta = 1.0 / T
 R0 = 100
 Rb = 350
 r_mono = 2.5
-N = 100
+N = 2
 
 tolerance = 0.01
 
@@ -17,12 +17,12 @@ linker_multliplicity = 1
 
 
 Bs_points = 100
-Bs_min = 36000
-Bs_max = 38000
+Bs_min = 20000
+Bs_max = 50000
 
 Ebind0_points = 100
-Ebind0_min = -5
-Ebind0_max = -4
+Ebind0_min = -10
+Ebind0_max = 0
 
 Bs_list = np.linspace(Bs_min, Bs_max, Bs_points)
 Ebind0_list = np.linspace(Ebind0_min, Ebind0_max, Ebind0_points)
@@ -69,7 +69,9 @@ else:
 
 plt.colorbar()
 
-plt.xlabel(r'$E_{\mathrm{bind},0}$')
+plt.title(r'$N = {}$'.format(N))
+
+plt.xlabel(r'$E_{\mathrm{bind}}^0$')
 plt.ylabel(r'$B_s$')
 
 plt.savefig('Bs_Eb_matrix.pdf')
