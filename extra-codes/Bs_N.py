@@ -8,9 +8,17 @@ beta = 1.0 / T
 R0 = 100
 Rb = 350
 r_mono = 2.5
-# Bs = 10000
-N_list = np.arange(2, 100)
-Bs_list = np.linspace(30000, 40000, 100)
+
+N_min = 2
+N_max = 300
+
+N_list = np.arange(N_min, N_max+1)
+
+Bs_points = 100
+Bs_min = 30000
+Bs_max = 40000
+
+Bs_list = np.linspace(Bs_min, Bs_max, Bs_points)
 
 normalize_lengths = 1
 
