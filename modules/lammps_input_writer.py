@@ -261,11 +261,43 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
         
         ########### PRINT ALL MONOMER POSITIONS ################
         
+        monomer_counter = 1
         for layer_i in range(num_layers - 1):
+            input_f.write("# Monomer {}\n".format(monomer_counter))
+            
             layer_1 = filament_name.layers[layer_i]
             layer_2 = filament_name.layers[layer_i + 1]
             
-            layer_index_1 = layer_1.indices[0]
+            for atom_i in range(len(layer_1.positions)):
+                atom_index = layer_1.indices[atom_i]
+                input_f.write("variable m{}a{}x equal x[{}]\n".format(monomer_counter, atom_i+1, atom_index))
+                input_f.write("variable m{}a{}y equal y[{}]\n".format(monomer_counter, atom_i+1, atom_index))
+                input_f.write("variable m{}a{}z equal z[{}]\n".format(monomer_counter, atom_i+1, atom_index))
+            
+            input_f.write("\n")
+            
+            for atom_i in range(len(layer_2.positions)):
+                atom_index = layer_2.indices[atom_i]
+                input_f.write("variable m{}a{}x equal x[{}]\n".format(monomer_counter, atom_i+1+len(layer_1.positions), atom_index))
+                input_f.write("variable m{}a{}y equal y[{}]\n".format(monomer_counter, atom_i+1+len(layer_1.positions), atom_index))
+                input_f.write("variable m{}a{}z equal z[{}]\n".format(monomer_counter, atom_i+1+len(layer_1.positions), atom_index))
+            
+            input_f.write("\n")
+            
+            input_f.write("variable m{}x equal (v_m{}a1x+v_m{}a2x+v_m{}a3x+v_m{}a4x+v_m{}a5x+v_m{}a6x+v_m{}a7x+v_m{}a8x)/8\n".format(monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter))
+            input_f.write("variable m{}y equal (v_m{}a1y+v_m{}a2y+v_m{}a3y+v_m{}a4y+v_m{}a5y+v_m{}a6y+v_m{}a7y+v_m{}a8y)/8\n".format(monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter))
+            input_f.write("variable m{}z equal (v_m{}a1z+v_m{}a2z+v_m{}a3z+v_m{}a4z+v_m{}a5z+v_m{}a6z+v_m{}a7z+v_m{}a8z)/8\n".format(monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter, monomer_counter))
+            
+            input_f.write("\n")
+                
+            monomer_counter += 1
+        
+        # -----------------------------------------------------
+        
+        input_f.write("fix printmonomers all print ${record_interval} \"${tsteps} ")
+        for monomer_i in range(1, num_monomers + 1):
+            input_f.write("${{m{}x}} ${{m{}y}} ${{m{}z}} ".format(monomer_i, monomer_i, monomer_i))
+        input_f.write("\" file mon_pos/mon_pos.${xx}.txt screen no\n")
         
         # -----------------------------------------------------
         
