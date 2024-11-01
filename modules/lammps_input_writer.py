@@ -299,6 +299,8 @@ def write_lammps_input(filament_name: filament, box_dimensions: list, mass: list
             input_f.write("${{m{}x}} ${{m{}y}} ${{m{}z}} ".format(monomer_i, monomer_i, monomer_i))
         input_f.write("\" file mon_pos/mon_pos.${xx}.txt screen no\n")
         
+        input_f.write("\n")
+        
         # -----------------------------------------------------
         
         input_f.write("thermo ${thermo_run}\n")
