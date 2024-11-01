@@ -40,14 +40,14 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 14
+num_monomers = 20
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = 332
+distance_from_axis = 328
 # distance_from_axis = 0
 
 # Angle of the filament with the wall
@@ -65,7 +65,7 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 
 linker_list = []
 for i in range(num_monomers):
-    if i % 2 == 0:
+    if i % 4 == 0:
         linker_list.append(1)
     else:
         linker_list.append(0)
@@ -168,7 +168,7 @@ minimization_parameters = [energy_tolerance,
 sim_parameters = [steps_min, steps_run, thermo_min, thermo_run,
                   record_interval, dump_interval_min, dump_interval_run, temperture, time_step, minimization_parameters]
 
-folders = ['data', 'dump', 'link_pos', 'e2e_pos', 'com_pos']
+folders = ['data', 'dump', 'link_pos', 'com_pos', 'mon_pos']
 
 # ----------------------------------------------------------------------------------
 
