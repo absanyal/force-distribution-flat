@@ -2,6 +2,8 @@ from sys import argv
 import numpy as np
 import matplotlib.pyplot as plt
 import modules.rcparams
+from scipy.optimize import curve_fit
+from  numpy import cos, sin
 
 ################################# ENTER PARAMETERS ########################################
 
@@ -11,7 +13,9 @@ filament_info_file = 'info/filament_info.txt'
 
 # ----------------- PLOT TOGGLES -------------------------
 
-plot_e2e_distance = True
+plot_e2e_distance = 1
+plot_e2e_hist = 1
+plot_correlations = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 fraction_to_skip_before_recording = 0.05
@@ -28,7 +32,7 @@ except FileNotFoundError:
 
 num_monomers = int(num_monomers)
 num_linkers = int(num_linkers)
-lc = num_monomers * a # Contour length of the filament
+lc = num_monomers * a - 2 * a
 
 # --------------------------------------------------------------------------------------------
 # The index of the run being analyzed is passed as an argument to the script
@@ -92,12 +96,14 @@ for t_i in range(num_iterations):
     e2e_dist[t_i] = np.linalg.norm(mon_end - mon_start)
 
 avg_e2e_dist = np.mean(e2e_dist[recording_start_index:])
+expected_e2e_dist = 2 * R * sin(lc / (2 * R))
     
 if plot_e2e_distance:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
     
     ax.plot(t_list, e2e_dist, color='black', lw=1, label='End-to-end distance')
     ax.axhline(avg_e2e_dist, color='red', lw=1, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
+    # ax.axhline(expected_e2e_dist, color='blue', lw=1, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
     
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'$R_{\mathrm{e-e}}$')
@@ -106,12 +112,74 @@ if plot_e2e_distance:
     
     plt.savefig('plots/e2e_distance.{}.pdf'.format(run_i), dpi=300)
 
+if plot_e2e_hist:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    
+    ax.hist(e2e_dist[recording_start_index:], bins='auto', color='blue', edgecolor='none', rwidth=0.8, density=True)
+    ax.axvline(avg_e2e_dist, color='red', lw=3, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
+    # ax.axvline(expected_e2e_dist, color='blue', lw=1, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
+    
+    ax.set_xlabel(r'$R_{\mathrm{e-e}}$')
+    ax.set_ylabel('Frequency')
+    
+    ax.legend()
+    
+    plt.savefig('plots/e2e_hist.{}.pdf'.format(run_i), dpi=300)
 
 # --------------------------------------------------------------------------------------------
 
 # Calculate the tangent vectors
 tangent_vectors_list = np.zeros((num_iterations, num_monomers - 1, 3))
+correlations = np.zeros((num_iterations, num_monomers - 1))
+average_correlations = np.zeros(num_monomers - 1)
+
+s_list = np.zeros_like(average_correlations)
+for s in range(num_monomers - 1):
+    s_list[s] = s * a
 
 for t_i in range(num_iterations):
     for m_i in range(num_monomers - 1):
         tangent_vectors_list[t_i, m_i] = mon_pos[t_i, m_i + 1] - mon_pos[t_i, m_i]
+
+for t_i in range(num_iterations):
+    for vi in range(len(tangent_vectors_list[t_i])):
+        tangent_1 = tangent_vectors_list[t_i, 0]
+        tangent_s = tangent_vectors_list[t_i, vi]
+        correlations[t_i, vi] = np.dot(tangent_1, tangent_s) / (np.linalg.norm(tangent_1) * np.linalg.norm(tangent_s)) 
+
+for m_i in range(num_monomers - 1):
+    average_correlations[m_i] = np.mean(correlations[:, m_i])
+
+# for m_i in range(num_monomers - 1):
+#     average_correlations[m_i] = average_correlations[m_i] / ( cos((s_list[m_i] * a) / R) )
+
+# --------------------------------------------------------------------------------------------
+
+# Fitting the data
+
+def correlation_function(s, l_p):
+    return np.exp(-(s) / l_p) * cos((s) / R)
+popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
+
+
+lp_fit = popt
+err_lp = np.sqrt(np.diag(pcov))
+
+fitting_s = np.linspace(s_list[0], s_list[-1], 100)
+fitting_correlations = correlation_function(s_list, *popt)
+
+# --------------------------------------------------------------------------------------------
+
+if plot_correlations:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    
+    ax.plot(s_list, average_correlations, color='black', lw=0, label='Simulation', marker='o', markersize=3)
+    
+    ax.plot(s_list, fitting_correlations, color='red', lw=1, ls='--', label=r'Fitting: $l_p = {:.2f} \pm {:.2f}$'.format(lp_fit[0], err_lp[0]))
+    
+    ax.set_xlabel(r'$s$')
+    ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
+    
+    plt.legend()
+    
+    plt.savefig('plots/correlations.{}.pdf'.format(run_i), dpi=300)
