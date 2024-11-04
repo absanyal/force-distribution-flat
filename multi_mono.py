@@ -32,7 +32,7 @@ except FileNotFoundError:
 
 num_monomers = int(num_monomers)
 num_linkers = int(num_linkers)
-lc = num_monomers * a - 2 * a
+lc = a * (num_monomers - 1)
 
 # --------------------------------------------------------------------------------------------
 # The index of the run being analyzed is passed as an argument to the script
@@ -162,7 +162,7 @@ def correlation_function(s, l_p):
 popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 
 
-lp_fit = popt
+lp_fit = popt[0]
 err_lp = np.sqrt(np.diag(pcov))
 
 fitting_s = np.linspace(s_list[0], s_list[-1], 100)
@@ -175,7 +175,7 @@ if plot_correlations:
     
     ax.plot(s_list, average_correlations, color='black', lw=0, label='Simulation', marker='o', markersize=3)
     
-    ax.plot(s_list, fitting_correlations, color='red', lw=1, ls='--', label=r'Fitting: $l_p = {:.2f} \pm {:.2f}$'.format(lp_fit[0], err_lp[0]))
+    ax.plot(s_list, fitting_correlations, color='red', lw=1, ls='--', label=r'Fitting: $l_p = {:.2f} \pm {:.2f}$'.format(lp_fit, err_lp[0]))
     
     ax.set_xlabel(r'$s$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
