@@ -2,17 +2,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 import rcparams
 
-N_list = np.arange(1, 1000)
+n_input, n_attach_input = np.loadtxt('n_vs_attached_all.dat', unpack=True)
+fraction_attached = n_attach_input / n_input
+
+data_average = 0
+
+counter = 0
+for n, n_attach in zip(n_input, n_attach_input):
+    if n > 10:
+        data_average += n_attach
+        counter += 1
+
+data_average = data_average / counter
+        
+
+n_input = n_input[1:]
+n_attach_input = n_attach_input[1:]
+fraction_attached = fraction_attached[1:]
+
+N_list = np.arange(4, 100)
 average_length_list = []
 
+Ebind0 = -(4.8)
+T = 1
+beta = 1.0 / T
+R0 = 100
+Rb = 350
+r_mono = 2.5
+Bs = 38650
+
+lp = Bs / 1000
+
 for N in N_list:
-    Ebind0 = -(4.8)/4
-    T = 1
-    beta = 1.0 / T
-    R0 = 100
-    Rb = 350
-    r_mono = 2.5
-    Bs = 10000
 
     n_list = np.arange(1, N+1)
     p_list = np.zeros_like(n_list, dtype=float)
@@ -44,16 +65,28 @@ for N in N_list:
 max_val = np.max(average_length_list)
 
 plt.figure(figsize=(6, 4), dpi=300, constrained_layout=True)
+
 plt.plot(N_list, average_length_list, color='black')
+
 plt.xlabel('Number of monomers')
 plt.ylabel('Average length attached')
 
-plt.xlim(N_list[0], N_list[-1])
-plt.xticks(np.arange(0, N_list[-1], 100))
+# plt.xlim(N_list[0], N_list[-1])
+# plt.xticks(np.arange(0, N_list[-1], 100))
 
-plt.ylim(bottom=0)
+# plt.ylim(bottom=0)
+
+plt.xscale('log')
 
 plt.axhline(max_val, color='red', linestyle='--', linewidth = 0.5, label='Max: {:.2f}'.format(max_val))
+
+plt.axhline(data_average, color='green', linestyle='--', linewidth = 0.5, label='Data max: {:.2f}'.format(data_average))
+
+plt.plot(n_input, n_attach_input, 'o', color='blue', label='Data')
+
+# plt.plot(n_input, fraction_attached, 'o', color='blue', label='Data')
+
+plt.title(r'$l_p = {:.2f}\,\mu m$'.format(lp))
 
 plt.legend()
 
