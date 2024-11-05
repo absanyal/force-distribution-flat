@@ -7,7 +7,7 @@ beta = 1.0 / T
 R0 = 100
 Rb = 350
 r_mono = 2.5
-N = 2
+N = 20
 
 tolerance = 0.01
 
@@ -21,7 +21,7 @@ Bs_min = 20000
 Bs_max = 50000
 
 Ebind0_points = 100
-Ebind0_min = -10
+Ebind0_min = -8
 Ebind0_max = 0
 
 Bs_list = np.linspace(Bs_min, Bs_max, Bs_points)
@@ -63,7 +63,7 @@ for Bs_i, Bs in enumerate(Bs_list):
 plt.figure()
 
 if normalize_lengths:
-    plt.imshow(Bs_Eb_matrix, aspect='auto', origin='lower', extent=[Ebind0_list[0], Ebind0_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma')
+    plt.imshow(Bs_Eb_matrix, aspect='auto', origin='lower', extent=[Ebind0_list[0], Ebind0_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma', vmin=0, vmax=1)
 else:
     plt.imshow(Bs_Eb_matrix, aspect='auto', origin='lower', extent=[Ebind0_list[0], Ebind0_list[-1], Bs_list[0], Bs_list[-1]], cmap='magma')
 

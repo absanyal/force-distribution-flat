@@ -10,7 +10,7 @@ Rb = 350
 r_mono = 2.5
 
 N_min = 2
-N_max = 300
+N_max = 100
 
 N_list = np.arange(N_min, N_max+1)
 
