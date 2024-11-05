@@ -143,15 +143,15 @@ for t_i in range(num_iterations):
 
 for t_i in range(num_iterations):
     for vi in range(len(tangent_vectors_list[t_i])):
-        tangent_1 = tangent_vectors_list[t_i, 0]
+        tangent_0 = tangent_vectors_list[t_i, 0]
         tangent_s = tangent_vectors_list[t_i, vi]
-        correlations[t_i, vi] = np.dot(tangent_1, tangent_s) / (np.linalg.norm(tangent_1) * np.linalg.norm(tangent_s)) 
+        correlations[t_i, vi] = np.dot(tangent_0, tangent_s) / (np.linalg.norm(tangent_0) * np.linalg.norm(tangent_s)) 
 
 for m_i in range(num_monomers - 1):
     average_correlations[m_i] = np.mean(correlations[:, m_i])
 
 # for m_i in range(num_monomers - 1):
-#     average_correlations[m_i] = average_correlations[m_i] / ( cos((s_list[m_i] * a) / R) )
+#     average_correlations[m_i] = average_correlations[m_i] / ( cos((s_list[m_i]) / R) )
 
 # --------------------------------------------------------------------------------------------
 
@@ -159,14 +159,24 @@ for m_i in range(num_monomers - 1):
 
 def correlation_function(s, l_p):
     return np.exp(-(s) / l_p) * cos((s) / R)
+
+def correlation_function(s, l_p, alpha):
+    return np.exp(-(s) / l_p) * cos(s/alpha)
+
 popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 
 
 lp_fit = popt[0]
+alpha_fit = popt[1]
 err_lp = np.sqrt(np.diag(pcov))
+
+print('Persistence length: {:.2f} +/- {:.2f}'.format(lp_fit, err_lp[0]))
+print('Alpha: {:.2f}'.format(alpha_fit))
 
 fitting_s = np.linspace(s_list[0], s_list[-1], 100)
 fitting_correlations = correlation_function(s_list, *popt)
+
+fitting_label = r'Fitting: $l_p = {:.2f} \pm {:.2f}$ nm'.format(lp_fit, err_lp[0])
 
 # --------------------------------------------------------------------------------------------
 
@@ -175,12 +185,14 @@ if plot_correlations:
     
     ax.plot(s_list, average_correlations, color='black', lw=0, label='Simulation', marker='o', markersize=3)
     
-    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'Fitting: $l_p = {:.2f} \pm {:.2f}$ nm'.format(lp_fit, err_lp[0]))
+    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}\\\,\alpha = {:.2f}$'.format(lp_fit, err_lp[0], alpha_fit))
     
     ax.set_xlabel(r'$s$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
     
     # ax.set_xscale('log')
+    
+    plt.title(r'Fitting to $\exp(-s/l_p) \cos(s / \alpha)$')
     
     plt.legend()
     
