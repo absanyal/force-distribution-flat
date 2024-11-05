@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import rcparams
 from numpy import sin, cos, pi
 
-N_list = np.arange(1, 20)
+N_list = np.arange(1, 100)
 # theta_list = [0, pi/6, pi/3, pi/2, 2 * pi/3, 5 * pi/6, pi]
 # theta_label_list = ['0', r'$\frac{\pi}{6}$', r'$\frac{\pi}{3}$', r'$\frac{\pi}{2}$', r'$\frac{2\pi}{3}$', r'$\frac{5\pi}{6}$', r'$\pi$']
 
@@ -23,7 +23,7 @@ beta = 1.0 / T
 R0 = 100
 Rb = 350
 r_mono = 2.5
-Bs = 37500
+Bs = 38500
 
 for theta_i in range(theta_min, theta_max+1, theta_increment):
     theta_label_list.append(r'${}^\circ$'.format(theta_i))
