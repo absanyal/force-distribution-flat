@@ -30,4 +30,6 @@ ax.plot(test_gap, test_p, '--', color='r', label='Fit: $y = {:.2f}x + {:.2f}$'.f
 ax.set_xlabel('Gap between linkers')
 ax.set_ylabel('Probability of attachment')
 
+ax.legend()
+
 plt.savefig('gap_vs_p_attach.pdf')
