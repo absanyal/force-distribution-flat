@@ -19,6 +19,7 @@ plot_num_attached = 1
 plot_attachment_status = 1
 plot_attached_segment_length = 1
 plot_is_attached = 1
+plot_attach_detach_intervals = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 smoothing_window = 11
@@ -304,9 +305,9 @@ if plot_num_attached:
     plt.cla()
     ax.cla()
 
-    with open('data/num_attached.{}.txt'.format(run_i), 'w') as f:
-        f.write('# avg_num_attached \t avg_fraction_attached\n')
-        f.write('{} \t {}'.format(avg_num_attached, avg_fraction_attached))
+    # with open('data/num_attached.{}.txt'.format(run_i), 'w') as f:
+    #     f.write('# avg_num_attached \t avg_fraction_attached\n')
+    #     f.write('{} \t {}'.format(avg_num_attached, avg_fraction_attached))
 
 # ----------------- FILAMENT ATTACHMENT DETACHMENT STATUS ----------------------
 
@@ -335,3 +336,58 @@ if plot_is_attached:
     plt.clf()
     plt.cla()
     ax.cla()
+
+# ----------------- ATTACHMENT DETACHMENT INTERVALS ----------------------
+
+attach_times = []
+detach_times = []
+attached_interval_list = []
+
+attach_time = 0
+detach_time = 0
+
+is_attached = False
+for t_i in range(num_iterations):
+    if is_attached_list[t_i] == 1 and not is_attached:
+        attach_time = t_list[t_i]
+        attach_times.append(attach_time)
+        is_attached = True
+    elif is_attached_list[t_i] == 0 and is_attached:
+        detach_time = t_list[t_i]
+        detach_times.append(detach_time)
+        is_attached = False
+        attached_interval = detach_time - attach_time
+        attached_interval_list.append(attached_interval)
+
+with open('data/attach_times.{}.txt'.format(run_i), 'w') as f:
+    f.write('# attach_times\n')
+    for t in attach_times:
+        f.write('{}\n'.format(t))
+
+with open('data/detach_times.{}.txt'.format(run_i), 'w') as f:
+    f.write('# detach_times\n')
+    for t in detach_times:
+        f.write('{}\n'.format(t))
+
+with open('data/attached_intervals.{}.txt'.format(run_i), 'w') as f:
+    f.write('# attached_intervals\n')
+    for i in attached_interval_list:
+        f.write('{:.4f}\n'.format(i))
+
+average_attached_interval = np.mean(attached_interval_list)
+
+if plot_attach_detach_intervals:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+
+    ax.hist(attached_interval_list, bins='auto', color='b', rwidth=0.85, density=True)
+    
+    ax.axvline(average_attached_interval, color='r', linestyle='--', linewidth=0.5, label='Average: {:.2f}'.format(average_attached_interval))
+    
+    ax.set_xlabel(r'Attached interval')
+    ax.set_ylabel(r'Frequency')
+    
+    ax.legend(loc='upper right')
+    
+    plt.savefig('plots/attached_intervals.{}.pdf'.format(run_i), dpi=300)
+    
+    
