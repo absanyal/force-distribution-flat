@@ -374,17 +374,32 @@ with open('data/attached_intervals.{}.txt'.format(run_i), 'w') as f:
     for i in attached_interval_list:
         f.write('{:.4f}\n'.format(i))
 
-average_attached_interval = np.mean(attached_interval_list)
+if len(attached_interval_list) != 0:
+    average_attached_interval = np.mean(attached_interval_list)
 
-if plot_attach_detach_intervals:
+
+eligible_to_plot_intervals = 1
+if len(attached_interval_list) == 0:
+    eligible_to_plot_intervals = 0
+
+if plot_attach_detach_intervals and eligible_to_plot_intervals:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+    
+    if max(attached_interval_list) != min(attached_interval_list):
+        bin_interval = (max(attached_interval_list) - min(attached_interval_list)) / 20
+        
+        bin_list = np.arange(min(attached_interval_list), max(attached_interval_list) + bin_interval, bin_interval)
+    else:
+        bin_list = 'auto'
 
-    ax.hist(attached_interval_list, bins='auto', color='b', rwidth=0.85, density=True)
+    ax.hist(attached_interval_list, bins=bin_list, color='b', rwidth=0.85, density=True)
     
     ax.axvline(average_attached_interval, color='r', linestyle='--', linewidth=0.5, label='Average: {:.2f}'.format(average_attached_interval))
     
     ax.set_xlabel(r'Attached interval')
     ax.set_ylabel(r'Frequency')
+    
+    # ax.set_xscale('log')
     
     ax.legend(loc='upper right')
     
