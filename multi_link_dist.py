@@ -18,6 +18,7 @@ plot_proximity = 1
 plot_num_attached = 1
 plot_attachment_status = 1
 plot_attached_segment_length = 1
+plot_is_attached = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 smoothing_window = 11
@@ -25,6 +26,7 @@ detection_window = 51
 threshold = 0.2
 hitting_distance = 2.0
 fraction_to_skip_before_recording = 0.05
+attachment_number_threshold = 2 # Number of linkers to be attached for a segment to be considered attached
 
 if smoothing_window % 2 == 0:
     raise ValueError('Smoothing window must be an odd number.')
@@ -305,3 +307,31 @@ if plot_num_attached:
     with open('data/num_attached.{}.txt'.format(run_i), 'w') as f:
         f.write('# avg_num_attached \t avg_fraction_attached\n')
         f.write('{} \t {}'.format(avg_num_attached, avg_fraction_attached))
+
+# ----------------- FILAMENT ATTACHMENT DETACHMENT STATUS ----------------------
+
+is_attached_list = np.zeros_like(t_list)
+
+for t_i in range(num_iterations):
+    if num_attached[t_i] >= attachment_number_threshold:
+        is_attached_list[t_i] = 1
+
+is_attached_eligible = is_attached_list[recording_start_index:]
+p_attached = np.sum(is_attached_eligible) / len(is_attached_eligible)
+
+if plot_is_attached:
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+
+    ax.plot(t_list, is_attached_list, linewidth=1.0, color='k')
+
+    ax.set_xlabel(r'$t/\tau$')
+    ax.set_ylabel(r'Is attached')
+    ax.set_xlim([t_list[0], t_list[-1]])
+    
+    ax.set_title('P(attached) = {:.2f}'.format(p_attached))
+
+    plt.savefig('plots/is_attached.{}.pdf'.format(run_i), dpi=300)
+    
+    plt.clf()
+    plt.cla()
+    ax.cla()
