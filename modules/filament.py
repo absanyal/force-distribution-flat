@@ -81,8 +81,8 @@ class filament:
         R = self._radius_of_curvature
         d = self.__linker_distance
 
-        a1 = a + ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
-        a2 = a - ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
+        a1 = a + ((a**2)) / np.sqrt(4 * R**2 - a**2)
+        a2 = a - ((a**2)) / np.sqrt(4 * R**2 - a**2)
 
         l = a * R / np.sqrt(4 * R**2 - a**2)
 
@@ -297,8 +297,8 @@ class filament:
         R = self._radius_of_curvature
         d = self.__linker_distance
 
-        a1 = a + ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
-        a2 = a - ((a**2) * 2) / np.sqrt(4 * R**2 - a**2)
+        a1 = a + ((a**2)) / np.sqrt(4 * R**2 - a**2)
+        a2 = a - ((a**2)) / np.sqrt(4 * R**2 - a**2)
 
         l = a * R / np.sqrt(4 * R**2 - a**2)
 
