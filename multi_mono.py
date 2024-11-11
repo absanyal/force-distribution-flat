@@ -157,20 +157,23 @@ for m_i in range(num_monomers - 1):
 
 # Fitting the data
 
-# def correlation_function(s, l_p):
-#     return np.exp(-(s) / l_p) * cos((s) / R)
+def correlation_function(s, l_p):
+    return np.exp(-(s) / l_p) * cos((s) / R)
 
-def correlation_function(s, l_p, alpha):
-    return np.exp(-(s) / l_p) * cos(s/alpha)
+# def correlation_function(s, l_p, alpha):
+#     return np.exp(-(s) / l_p) * cos(s/alpha)
 
 popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 
 
-lp_fit, alpha_fit = popt
-err_lp, err_alpha = np.sqrt(np.diag(pcov))
+# lp_fit, alpha_fit = popt
+# err_lp, err_alpha = np.sqrt(np.diag(pcov))
+
+lp_fit = popt[0]
+err_lp = np.sqrt(pcov[0, 0])
 
 print('Persistence length: {:.2f} +/- {:.2f}'.format(lp_fit, err_lp))
-print('Alpha: {:.2f} +/- {:.2f}'.format(alpha_fit, err_alpha))
+# print('Alpha: {:.2f} +/- {:.2f}'.format(alpha_fit, err_alpha))
 
 fitting_s = np.linspace(s_list[0], s_list[-1], 100)
 fitting_correlations = correlation_function(s_list, *popt)
@@ -182,7 +185,9 @@ if plot_correlations:
     
     ax.plot(s_list, average_correlations, color='black', lw=0, label='Simulation', marker='o', markersize=3)
     
-    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}\\\,\alpha = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp, alpha_fit, err_alpha))
+    # ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}\\\,\alpha = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp, alpha_fit, err_alpha))
+    
+    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp))
     
     ax.set_xlabel(r'$s\,[\mathrm{nm}]$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
