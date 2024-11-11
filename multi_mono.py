@@ -184,7 +184,7 @@ if plot_correlations:
     
     ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}\\\,\alpha = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp, alpha_fit, err_alpha))
     
-    ax.set_xlabel(r'$s$')
+    ax.set_xlabel(r'$s\,[\mathrm{nm}]$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
     
     # ax.set_xscale('log')
