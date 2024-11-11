@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import modules.rcparams
 from scipy.optimize import curve_fit
-from  numpy import cos, sin
+from numpy import cos, sin
 
 ################################# ENTER PARAMETERS ########################################
 
@@ -92,40 +92,52 @@ e2e_dist = np.zeros(num_iterations)
 for t_i in range(num_iterations):
     mon_start = mon_pos[t_i, 0]
     mon_end = mon_pos[t_i, -1]
-    
+
     e2e_dist[t_i] = np.linalg.norm(mon_end - mon_start)
 
 avg_e2e_dist = np.mean(e2e_dist[recording_start_index:])
 expected_e2e_dist = 2 * R * sin(lc / (2 * R))
-    
+spread_e2e_dist = np.std(e2e_dist[recording_start_index:])
+lower_bound = avg_e2e_dist - spread_e2e_dist
+upper_bound = avg_e2e_dist + spread_e2e_dist
+
 if plot_e2e_distance:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
-    
+
     ax.plot(t_list, e2e_dist, color='black', lw=1, label='End-to-end distance')
-    ax.axhline(avg_e2e_dist, color='red', lw=3, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
-    ax.axhline(expected_e2e_dist, color='g', lw=3, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
-    
+    ax.axhline(avg_e2e_dist, color='red', lw=3, ls='--',
+               label=r'Average: ${:.2f} \pm {:.2f}$ nm'.format(avg_e2e_dist, spread_e2e_dist))
+    ax.axhline(expected_e2e_dist, color='g', lw=3, ls='--',
+               label='Expected: {:.2f} nm'.format(expected_e2e_dist))
+    ax.fill_between(t_list, lower_bound, upper_bound, color='red', alpha=0.2)
+
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'$R_{\mathrm{e-e}}$')
-    
+
     ax.set_xlim(t_list[0], t_list[-1])
-    
+
     ax.legend()
-    
+
     plt.savefig('plots/e2e_distance.{}.pdf'.format(run_i), dpi=300)
 
 if plot_e2e_hist:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
-    
-    ax.hist(e2e_dist[recording_start_index:], bins='auto', color='blue', edgecolor='none', rwidth=0.8, density=True)
-    ax.axvline(avg_e2e_dist, color='red', lw=3, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
-    ax.axvline(expected_e2e_dist, color='g', lw=3, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
-    
+
+    ax.hist(e2e_dist[recording_start_index:], bins='auto',
+            color='blue', edgecolor='none', rwidth=0.8, density=True)
+    ax.axvline(avg_e2e_dist, color='red', lw=3, ls='--',
+               label=r'Average: ${:.2f} \pm {:.2f}$ nm'.format(avg_e2e_dist, spread_e2e_dist))
+    ax.axvline(expected_e2e_dist, color='g', lw=3, ls='--',
+               label='Expected: {:.2f} nm'.format(expected_e2e_dist))
+
+    ax.axvline(lower_bound, color='red', lw=0.5, ls='--')
+    ax.axvline(upper_bound, color='red', lw=0.5, ls='--')
+
     ax.set_xlabel(r'$R_{\mathrm{e-e}}$')
     ax.set_ylabel('Frequency')
-    
+
     ax.legend()
-    
+
     plt.savefig('plots/e2e_hist.{}.pdf'.format(run_i), dpi=300)
 
 # --------------------------------------------------------------------------------------------
@@ -141,13 +153,15 @@ for s in range(num_monomers - 1):
 
 for t_i in range(num_iterations):
     for m_i in range(num_monomers - 1):
-        tangent_vectors_list[t_i, m_i] = mon_pos[t_i, m_i + 1] - mon_pos[t_i, m_i]
+        tangent_vectors_list[t_i, m_i] = mon_pos[t_i,
+                                                 m_i + 1] - mon_pos[t_i, m_i]
 
 for t_i in range(num_iterations):
     for vi in range(len(tangent_vectors_list[t_i])):
         tangent_0 = tangent_vectors_list[t_i, 0]
         tangent_s = tangent_vectors_list[t_i, vi]
-        correlations[t_i, vi] = np.dot(tangent_0, tangent_s) / (np.linalg.norm(tangent_0) * np.linalg.norm(tangent_s)) 
+        correlations[t_i, vi] = np.dot(
+            tangent_0, tangent_s) / (np.linalg.norm(tangent_0) * np.linalg.norm(tangent_s))
 
 for m_i in range(num_monomers - 1):
     average_correlations[m_i] = np.mean(correlations[:, m_i])
@@ -159,11 +173,13 @@ for m_i in range(num_monomers - 1):
 
 # Fitting the data
 
+
 def correlation_function(s, l_p):
     return np.exp(-(s) / l_p) * cos((s) / R)
 
 # def correlation_function(s, l_p, alpha):
 #     return np.exp(-(s) / l_p) * cos(s/alpha)
+
 
 popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 
@@ -184,21 +200,23 @@ fitting_correlations = correlation_function(s_list, *popt)
 
 if plot_correlations:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
-    
-    ax.plot(s_list, average_correlations, color='black', lw=0, label='Simulation', marker='o', markersize=3)
-    
+
+    ax.plot(s_list, average_correlations, color='black', lw=0,
+            label='Simulation', marker='o', markersize=3)
+
     # ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}\\\,\alpha = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp, alpha_fit, err_alpha))
-    
-    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize = 2, lw=1, ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp))
-    
+
+    ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize=2, lw=1,
+            ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp))
+
     ax.set_xlabel(r'$s\,[\mathrm{nm}]$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
-    
+
     # ax.set_xscale('log')
-    
+
     # plt.title(r'$\exp(-s/l_p) \cos(s / R_0)$ at $R_0 = {:.2f}\,\mathrm{{nm}}$'.format(R))
     plt.title(r'$R_0 = {:.2f}\,\mathrm{{nm}}$'.format(R))
-    
+
     plt.legend()
-    
+
     plt.savefig('plots/correlations.{}.pdf'.format(run_i), dpi=300)
