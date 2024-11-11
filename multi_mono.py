@@ -172,7 +172,7 @@ popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 lp_fit = popt[0]
 err_lp = np.sqrt(pcov[0, 0])
 
-print('Persistence length: {:.2f} +/- {:.2f}'.format(lp_fit, err_lp))
+print('Persistence length: {:.2f} +/- {:.2f} nm'.format(lp_fit, err_lp))
 # print('Alpha: {:.2f} +/- {:.2f}'.format(alpha_fit, err_alpha))
 
 fitting_s = np.linspace(s_list[0], s_list[-1], 100)
