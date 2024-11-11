@@ -171,10 +171,10 @@ popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
 # lp_fit, alpha_fit = popt
 # err_lp, err_alpha = np.sqrt(np.diag(pcov))
 
-lp_fit = popt[0]
-err_lp = np.sqrt(pcov[0, 0])
+lp_fit, = popt
+err_lp, = np.sqrt(np.diag(pcov))
 
-print('Persistence length: {:.2f} +/- {:.2f} nm'.format(lp_fit, err_lp))
+# print('Persistence length: {:.2f} +/- {:.2f} nm'.format(lp_fit, err_lp))
 # print('Alpha: {:.2f} +/- {:.2f}'.format(alpha_fit, err_alpha))
 
 fitting_s = np.linspace(s_list[0], s_list[-1], 100)
@@ -196,7 +196,8 @@ if plot_correlations:
     
     # ax.set_xscale('log')
     
-    plt.title(r'Fitting to $\exp(-s/l_p) \cos(s / R)$')
+    # plt.title(r'$\exp(-s/l_p) \cos(s / R_0)$ at $R_0 = {:.2f}\,\mathrm{{nm}}$'.format(R))
+    plt.title(r'$R_0 = {:.2f}\,\mathrm{{nm}}$'.format(R))
     
     plt.legend()
     
