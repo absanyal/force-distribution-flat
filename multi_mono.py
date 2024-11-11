@@ -194,7 +194,7 @@ if plot_correlations:
     
     # ax.set_xscale('log')
     
-    plt.title(r'Fitting to $\exp(-s/l_p) \cos(s / \alpha)$')
+    plt.title(r'Fitting to $\exp(-s/l_p) \cos(s / R)$')
     
     plt.legend()
     
