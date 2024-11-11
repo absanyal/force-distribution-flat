@@ -102,11 +102,13 @@ if plot_e2e_distance:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
     
     ax.plot(t_list, e2e_dist, color='black', lw=1, label='End-to-end distance')
-    ax.axhline(avg_e2e_dist, color='red', lw=1, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
-    # ax.axhline(expected_e2e_dist, color='blue', lw=1, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
+    ax.axhline(avg_e2e_dist, color='red', lw=3, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
+    ax.axhline(expected_e2e_dist, color='g', lw=3, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
     
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'$R_{\mathrm{e-e}}$')
+    
+    ax.set_xlim(t_list[0], t_list[-1])
     
     ax.legend()
     
@@ -117,7 +119,7 @@ if plot_e2e_hist:
     
     ax.hist(e2e_dist[recording_start_index:], bins='auto', color='blue', edgecolor='none', rwidth=0.8, density=True)
     ax.axvline(avg_e2e_dist, color='red', lw=3, ls='--', label='Average: {:.2f}'.format(avg_e2e_dist))
-    # ax.axvline(expected_e2e_dist, color='blue', lw=1, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
+    ax.axvline(expected_e2e_dist, color='g', lw=3, ls='--', label='Expected: {:.2f}'.format(expected_e2e_dist))
     
     ax.set_xlabel(r'$R_{\mathrm{e-e}}$')
     ax.set_ylabel('Frequency')
