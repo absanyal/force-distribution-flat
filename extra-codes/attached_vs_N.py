@@ -66,7 +66,7 @@ max_val = np.max(average_length_list)
 
 plt.figure(figsize=(6, 4), dpi=300, constrained_layout=True)
 
-plt.plot(N_list, average_length_list, color='black')
+# plt.plot(N_list, average_length_list, color='black')
 
 plt.xlabel('Number of monomers')
 plt.ylabel('Average length attached')
@@ -76,9 +76,9 @@ plt.ylabel('Average length attached')
 
 # plt.ylim(bottom=0)
 
-plt.xscale('log')
+# plt.xscale('log')
 
-plt.axhline(max_val, color='red', linestyle='--', linewidth = 0.5, label='Max: {:.2f}'.format(max_val))
+# plt.axhline(max_val, color='red', linestyle='--', linewidth = 0.5, label='Max: {:.2f}'.format(max_val))
 
 plt.axhline(data_average, color='green', linestyle='--', linewidth = 0.5, label='Data max: {:.2f}'.format(data_average))
 
@@ -86,7 +86,7 @@ plt.plot(n_input, n_attach_input, 'o', color='blue', label='Data')
 
 # plt.plot(n_input, fraction_attached, 'o', color='blue', label='Data')
 
-plt.title(r'$l_p = {:.2f}\,\mu m$'.format(lp))
+# plt.title(r'$l_p = {:.2f}\,\mu m$'.format(lp))
 
 plt.legend()
 
