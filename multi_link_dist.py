@@ -231,6 +231,10 @@ for t_i in range(num_iterations):
 
 average_attached_segment_length = np.mean(attached_segment_length[recording_start_index:])
 maximal_attached_segment_length = np.max(attached_segment_length)
+
+std_attached_segment_length = np.std(attached_segment_length[recording_start_index:])
+upper_bound_attached_segment_length = average_attached_segment_length + std_attached_segment_length
+lower_bound_attached_segment_length = average_attached_segment_length - std_attached_segment_length
     
 if plot_attached_segment_length:
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
@@ -239,6 +243,8 @@ if plot_attached_segment_length:
     
     ax.axhline(average_attached_segment_length, color='r', linestyle='--', linewidth=0.5, label='Average: {:.2f}'.format(average_attached_segment_length))
     ax.axhline(maximal_attached_segment_length, color='b', linestyle='--', linewidth=0.5, label='Maximum: {}'.format(maximal_attached_segment_length))
+    
+    ax.fill_between(t_list, upper_bound_attached_segment_length, lower_bound_attached_segment_length, color='gray', alpha=0.3)
     
     ax.set_xlabel(r'$t/\tau$')
     ax.set_ylabel(r'Attached segment length')
@@ -270,6 +276,11 @@ for t_i in range(num_iterations):
 # Calculate the average number of attached linkers
 avg_num_attached = np.mean(num_attached[recording_start_index:])
 
+std_num_attached = np.std(num_attached[recording_start_index:])
+
+upper_bound_num_attached = avg_num_attached + std_num_attached
+lower_bound_num_attached = avg_num_attached - std_num_attached
+
 fraction_attached = num_attached / num_linkers
 avg_fraction_attached = avg_num_attached / num_linkers
 
@@ -293,6 +304,8 @@ if plot_num_attached:
                linewidth=0.5, label='Average: {:.2f}'.format(avg_num_attached))
     ax.axhline(max_num_attached, color='b', linestyle='--',
                linewidth=0.5, label='Maximum: {}'.format(max_num_attached))
+    
+    ax.fill_between(t_list, upper_bound_num_attached, lower_bound_num_attached, color='gray', alpha=0.3)
 
     # ax.axhline(avg_fraction_attached, color='r', linestyle='--', linewidth=0.5, label='Average fraction: {:.2f}'.format(avg_fraction_attached))
 
