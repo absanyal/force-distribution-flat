@@ -146,7 +146,7 @@ if plot_e2e_hist:
 tangent_vectors_list = np.zeros((num_iterations, num_monomers - 1, 3))
 correlations = np.zeros((num_iterations, num_monomers - 1))
 average_correlations = np.zeros(num_monomers - 1)
-correlation_errors = np.zeros(num_monomers - 1)
+# correlation_errors = np.zeros(num_monomers - 1)
 
 s_list = np.zeros_like(average_correlations)
 for s in range(num_monomers - 1):
@@ -166,7 +166,7 @@ for t_i in range(num_iterations):
 
 for m_i in range(num_monomers - 1):
     average_correlations[m_i] = np.mean(correlations[:, m_i])
-    correlation_errors[m_i] = np.std(correlations[:, m_i])
+    # correlation_errors[m_i] = np.std(correlations[:, m_i])
 
 # for m_i in range(num_monomers - 1):
 #     average_correlations[m_i] = average_correlations[m_i] / ( cos((s_list[m_i]) / R) )
@@ -211,8 +211,8 @@ if plot_correlations:
     ax.plot(s_list, fitting_correlations, color='red', marker='o', markersize=2, lw=1,
             ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp))
 
-    ax.errorbar(s_list, average_correlations, yerr=correlation_errors,
-                fmt='none', ecolor='black', capsize=2, capthick=0.5, elinewidth=0.5)
+    # ax.errorbar(s_list, average_correlations, yerr=correlation_errors,
+    #             fmt='none', ecolor='blue', capsize=2, capthick=0.5, elinewidth=0.5)
 
     ax.set_xlabel(r'$s\,[\mathrm{nm}]$')
     ax.set_ylabel(r'$\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle$')
