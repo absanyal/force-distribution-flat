@@ -25,13 +25,13 @@ average_length_list = []
 
 Ebind0 = -(4.8)
 T = 1
-beta = 1.0 / T
+kB = 1
+beta = 1.0 / (kB * T)
 R0 = 100
 Rb = 350
 r_mono = 2.5
-Bs = 38650
 
-lp = Bs / 1000
+lp = 12000
 
 for N in N_list:
 
@@ -39,7 +39,7 @@ for N in N_list:
     p_list = np.zeros_like(n_list, dtype=float)
 
     for n_i, n in enumerate(n_list):
-        dEbend = r_mono * (n - 1) * Bs * ( (1/Rb) - (1/R0)  )**2
+        dEbend = r_mono * (n - 1) * kB * T * ( (1/Rb) - (1/R0)  )**2
         dEbind = n * Ebind0
         p_list[n_i] = (N - n + 1) * np.exp(-beta * (dEbend + dEbind))
 
@@ -86,7 +86,7 @@ plt.plot(n_input, n_attach_input, 'o', color='blue', label='Data')
 
 # plt.plot(n_input, fraction_attached, 'o', color='blue', label='Data')
 
-# plt.title(r'$l_p = {:.2f}\,\mu m$'.format(lp))
+plt.title(r'$l_p = {:.2f}\,\mu m$'.format(lp))
 
 plt.legend()
 
