@@ -10,19 +10,14 @@ Rb = 350
 r_mono = 2.5
 N = 20
 
-tolerance = 0.01
-
 normalize_lengths = 1
 
-linker_multliplicity = 1
-
-
 lp_points = 100
-lp_min = 1000
-lp_max = 1500
+lp_min = 800
+lp_max = 1600
 
 Ebind0_points = 100
-Ebind0_min = -2
+Ebind0_min = -1
 Ebind0_max = 0
 
 lp_list = np.linspace(lp_min, lp_max, lp_points)
