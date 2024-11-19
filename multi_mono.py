@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import modules.rcparams
 from scipy.optimize import curve_fit
-from numpy import cos, sin
+from numpy import cos, sin, log
 
 ################################# ENTER PARAMETERS ########################################
 
@@ -16,6 +16,7 @@ filament_info_file = 'info/filament_info.txt'
 plot_e2e_distance = 1
 plot_e2e_hist = 1
 plot_correlations = 1
+plot_correlations_linearized = 1
 
 # ----------------- SMOOTHING PARAMETERS -----------------
 fraction_to_skip_before_recording = 0.05
@@ -148,6 +149,8 @@ correlations = np.zeros((num_iterations, num_monomers - 1))
 average_correlations = np.zeros(num_monomers - 1)
 # correlation_errors = np.zeros(num_monomers - 1)
 
+average_correlations_linearized = np.zeros_like(average_correlations)
+
 s_list = np.zeros_like(average_correlations)
 for s in range(num_monomers - 1):
     s_list[s] = s * a
@@ -171,6 +174,10 @@ for m_i in range(num_monomers - 1):
 # for m_i in range(num_monomers - 1):
 #     average_correlations[m_i] = average_correlations[m_i] / ( cos((s_list[m_i]) / R) )
 
+for m_i in range(num_monomers - 1):
+    s = s_list[m_i]
+    average_correlations_linearized[m_i] = log(average_correlations[m_i] / cos(s / R))
+
 # --------------------------------------------------------------------------------------------
 
 # Fitting the data
@@ -181,6 +188,9 @@ def correlation_function(s, l_p):
 
 # def correlation_function(s, l_p, alpha):
 #     return np.exp(-(s) / l_p) * cos(s/alpha)
+
+def linear(s, lp):
+    return -s / lp
 
 
 popt, pcov = curve_fit(correlation_function, s_list, average_correlations)
@@ -225,3 +235,30 @@ if plot_correlations:
     plt.legend()
 
     plt.savefig('plots/correlations.{}.pdf'.format(run_i), dpi=300)
+
+if plot_correlations_linearized:
+    
+    popt, pcov = curve_fit(linear, s_list, average_correlations_linearized)
+    
+    lp_fit, = popt
+    err_lp, = np.sqrt(np.diag(pcov))
+    
+    fitting_s = np.linspace(s_list[0], s_list[-1], 100)
+    fitting_correlations_linearized = linear(s_list, *popt)
+    
+    fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
+
+    ax.plot(s_list, average_correlations_linearized, color='black', lw=0,
+            label='Simulation', marker='o', markersize=3)
+    
+    ax.plot(s_list, fitting_correlations_linearized, color='red', marker='o', markersize=2, lw=1,
+            ls='--', label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp_fit, err_lp))
+
+    ax.set_xlabel(r'$s\,[\mathrm{nm}]$')
+    ax.set_ylabel(r'$\ln\left(\langle \hat{t}_0 \cdot \hat{t}_{s} \rangle / \cos(s/R_0)\right)$')
+
+    plt.title(r'$R_0 = {:.2f}\,\mathrm{{nm}}$'.format(R))
+
+    plt.legend()
+
+    plt.savefig('plots/correlations_linearized.{}.pdf'.format(run_i), dpi=300)
