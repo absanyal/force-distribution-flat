@@ -12,7 +12,7 @@ fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
 
 ax.errorbar(ktheta, lp, yerr=lp_err, fmt='none', color='r', elinewidth=1, capsize=2)
 
-ax.plot(ktheta, lp, color='k', label='Data', marker='o', markersize=4)
+ax.plot(ktheta, lp, color='k', ls = '', label='Data', marker='o', markersize=4)
 
 ax.set_xlabel(r'$k_{\theta}\,(k_BT)$')
 ax.set_ylabel(r'$l_p$ (nm)')
