@@ -243,7 +243,6 @@ if plot_correlations_linearized:
     lp_fit, = popt
     err_lp, = np.sqrt(np.diag(pcov))
     
-    fitting_s = np.linspace(s_list[0], s_list[-1], 100)
     fitting_correlations_linearized = linear(s_list, *popt)
     
     fig, ax = plt.subplots(constrained_layout=True, figsize=(6, 4))
