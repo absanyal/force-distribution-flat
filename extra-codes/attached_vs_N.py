@@ -87,7 +87,7 @@ plt.ylabel('Average length attached')
 
 # plt.plot(n_input, fraction_attached, 'o', color='blue', label='Data')
 
-plt.title(r'$l_p = {:.2f}$ nm'.format(lp))
+plt.title(r'$l_p = {:.2f}$ nm, $E_{{\mathrm{{bind}}}}^0 = {:.2f}$ $k_BT$'.format(lp, Ebind0))
 
 # plt.legend()
 
