@@ -1,10 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import rcparams
-
-import numpy as np
-import matplotlib.pyplot as plt
-import rcparams
 from numpy import sin, cos, pi
 
 theta_min = 0
