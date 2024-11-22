@@ -295,11 +295,11 @@ def R0_const_N_const_lp_vs_Eb0(lp_min, lp_max, num_lp, Eb0_min, Eb0_max, num_Eb0
     mode : str
         Mode of the plot.
         
-        `number` \: Number of monomers attached to the cell.
+        `number:` Number of monomers attached to the cell.
         
-        `fraction` \: Fraction of monomers attached to the cell.
+        `fraction:` Fraction of monomers attached to the cell.
         
-        `status` \: Status of the monomer, 1 if at least two monomers are attached, 0 otherwise.
+        `status:` Status of the monomer, 1 if at least two monomers are attached, 0 otherwise.
         
     T : float
         Temperature, default is 1
