@@ -4,7 +4,7 @@ import rcparams
 from numpy import sin, cos, pi
 
 theta_min = 0
-theta_max = 90
+theta_max = 180
 
 theta_list = np.linspace(theta_min, theta_max, 1000) * pi / 180
 
@@ -21,16 +21,16 @@ r_mono = 2.5
 
 lp = 1300
 
-N = 100
+N = 20
 
-E0_min = -1.0
+E0_min = -1.5
 E0_max = -0.1
 
-E0_points = 100
+E0_points = 10
 
 Ebind0_list = np.linspace(E0_min, E0_max, E0_points)
 
-fig, ax = plt.subplots(figsize=(6, 4), dpi=300, constrained_layout=True)
+fig, ax = plt.subplots(figsize=(8, 6), dpi=300, constrained_layout=True)
 
 for Ebind0_i, Ebind0 in enumerate(Ebind0_list):
     average_length_list = []
@@ -55,7 +55,7 @@ for Ebind0_i, Ebind0 in enumerate(Ebind0_list):
     average_length_list = np.array(average_length_list)
 
 
-    ax.plot(theta_list/pi, average_length_list/N, label=r'$E_{{\mathrm{{bind}}}}^0 = {:.2f}$ $k_BT$'.format(Ebind0), lw=0.1, color='black')
+    ax.plot(theta_list/pi, average_length_list/N, label=r'$E_{{\mathrm{{bind}}}}^0 = {:.2f}$ $k_BT$'.format(Ebind0), lw=1.0)
 
     ax.set_xlabel(r'$\theta/\pi$')
     ax.set_ylabel(r'$\langle n \rangle / N$')
@@ -64,6 +64,8 @@ for Ebind0_i, Ebind0 in enumerate(Ebind0_list):
     ax.set_ylim(0, 1)
 
     ax.set_title(r'$l_p = {:.2f}$ nm, $N = {}$'.format(lp, N))
+    
+    ax.legend(loc='upper right', fontsize='small', bbox_to_anchor=(1.3, 1))
     
     if (Ebind0_i + 1) % 10 == 0:
         percentage = (Ebind0_i + 1) / E0_points * 100
