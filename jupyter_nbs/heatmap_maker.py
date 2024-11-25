@@ -333,3 +333,72 @@ def R0_const_N_const_lp_vs_Eb0(lp_min, lp_max, num_lp, Eb0_min, Eb0_max, num_Eb0
     
     return average_n_matrix
 
+def R0_const_lp_const_N_vs_Eb0(N_min, N_max, num_N, Eb0_min, Eb0_max, num_Eb0, lp, R0, R_cell, r_mono, mode = 'number', T=1, kB=1):
+    """
+    Generates a heatmap of average number of monomers attached to the cell as a function of number of monomers and binding energy.
+    
+    Parameters
+    ----------
+    
+    N_min, N_max : int
+        Minimum and maximum values of the total number of monomers
+    
+    num_N : int
+        Number of points to generate between N_min and N_max
+    
+    Eb0_min, Eb0_max : float
+        Minimum and maximum values of the binding energy
+        
+    num_Eb0 : int
+        Number of points to generate between Eb0_min and Eb0_max
+        
+    lp : float
+        Persistence length of the polymer
+        
+    R_cell : float
+        Radius of the cell
+    
+    r_mono : float
+        Radius of a monomer
+    
+    mode : str
+        Mode of the plot.
+        
+        `number:` Number of monomers attached to the cell.
+        
+        `fraction:` Fraction of monomers attached to the cell.
+        
+        `status:` Status of the monomer, 1 if at least two monomers are attached, 0 otherwise.
+        
+    T : float
+        Temperature, default is 1
+        
+    kB : float
+        Boltzmann constant, default is 1
+        
+    Returns
+    -------
+    
+    average_n_matrix : np.ndarray
+        Matrix of average number/fraction/status of monomers attached to the cell
+    """
+    
+    N_list = np.linspace(N_min, N_max, num_N)
+    Eb0_list = np.linspace(Eb0_min, Eb0_max, num_Eb0)
+    
+    average_n_matrix = np.zeros((num_N, num_Eb0), dtype=float)
+    
+    for N_i, N in enumerate(N_list):
+        for Eb0_i, Eb0 in enumerate(Eb0_list):
+            avg_n = average_n(N, lp, Eb0, R0, R_cell, r_mono, T, kB)
+            if mode == 'fraction':
+                avg_n = avg_n / N
+            elif mode == 'status':
+                if avg_n >= 2:
+                    avg_n = 1
+                else:
+                    avg_n = 0
+            average_n_matrix[N_i, Eb0_i] = avg_n
+    
+    return average_n_matrix
+
