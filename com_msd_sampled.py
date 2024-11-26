@@ -140,7 +140,7 @@ fitline = f(t_shortened, *fit_params)
 # ---------------- TAU CALCULATION ----------------
 
 tau = (D * (1E-9)**2) / (D_expected * (1E-6)**2)
-print("Assuming D_experiment = {:.4f} microns^2/sec".format(D))
+print("Assuming D_experiment = {:.4f} microns^2/sec".format(D_expected))
 print("tau = {:.4e} sec".format(tau))
 
 tau = tau / (1E-6)
