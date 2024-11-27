@@ -126,12 +126,14 @@ ds_sq_avg_sampled /= len(t0_iter_list)
 
 fit_params, fit_cov = curve_fit(f, t_shortened, ds_sq_avg_sampled)
 m, c = fit_params
+err_m, err_c = np.sqrt(np.diag(fit_cov))
 
-print('Fitted parameters: m = {:.4e}, c = {:.4e}'.format(fit_params[0], fit_params[1]))
+print('Fitted parameters:\nm = {:.4e}\nc = {:.4e}'.format(fit_params[0], fit_params[1]))
 D = fit_params[0]/(6)
+D_err = err_m/6
 
-print('Diffusion coefficient: D = {:.4e}'.format(D))
-print('or, approximately D = {:.4f}'.format(D))
+print('Diffusion coefficient:\nD = {:.4e} +/- {:.4e}'.format(D, D_err))
+print('D = {:.4f} +/- {:.4f}'.format(D, D_err))
 
 fitline = f(t_shortened, *fit_params)
 
@@ -140,12 +142,13 @@ fitline = f(t_shortened, *fit_params)
 # ---------------- TAU CALCULATION ----------------
 
 tau = (D * (1E-9)**2) / (D_expected * (1E-6)**2)
-print("Assuming D_experiment = {:.4f} microns^2/sec".format(D_expected))
+print("Assuming\nD_experiment = {:.4f} micron^2/sec".format(D_expected))
+print("We get")
 print("tau = {:.4e} sec".format(tau))
 
 tau = tau / (1E-6)
 
-print("tau = {:.4f} microseconds".format(tau))
+print("tau = {:.4f} microsecond".format(tau))
 
 # --------------------------------------------------------------------------------------------
 
