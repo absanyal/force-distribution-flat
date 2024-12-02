@@ -61,7 +61,8 @@ average_length_fit = average_length_vec(n_input, lp, Ebind0)
 plt.figure(figsize=(6, 4), dpi=300, constrained_layout=True)
 
 plt.plot(n_input, n_attach_input, 'o', color='blue', label='Data')
-plt.plot(n_input, average_length_fit, color='red', label=r'Fit:\\$l_p = {:.2f} \pm {:.2f}$\\$E_{{\mathrm{{bind}}}}^0 = {:.2f} \pm {:.2f}$'.format(lp, err_lp, Ebind0, err_Ebind0))
+plt.plot(n_input, n_input, color='black', ls='--', lw=1)
+# plt.plot(n_input, average_length_fit, color='red', label=r'Fit:\\$l_p = {:.2f} \pm {:.2f}$\\$E_{{\mathrm{{bind}}}}^0 = {:.2f} \pm {:.2f}$'.format(lp, err_lp, Ebind0, err_Ebind0))
 
 plt.xlabel('Number of monomers')
 plt.ylabel('Number of attached monomers', fontsize=16)
