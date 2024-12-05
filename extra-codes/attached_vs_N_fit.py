@@ -49,23 +49,26 @@ def average_length(N_max, lp, Ebind0):
 
 average_length_vec = np.vectorize(average_length)
 
-popt, pcov = curve_fit(lambda N_max, lp, Ebind0: average_length_vec(N_max, lp, Ebind0), n_input, n_attach_input, p0=[1200, -1.0], bounds=([0, -np.inf], [np.inf, 0]))
+# popt, pcov = curve_fit(lambda N_max, lp, Ebind0: average_length_vec(N_max, lp, Ebind0), n_input, n_attach_input, p0=[1200, -1.0], bounds=([0, -np.inf], [np.inf, 0]))
 
-lp, Ebind0 = popt
-err_lp, err_Ebind0 = np.sqrt(np.diag(pcov))
-print("lp = {:.2f} +/- {:.2f}".format(lp, err_lp))
-print("Ebind0 = {:.2f} +/- {:.2f}".format(Ebind0, err_Ebind0))
+# lp, Ebind0 = popt
+# err_lp, err_Ebind0 = np.sqrt(np.diag(pcov))
+# print("lp = {:.2f} +/- {:.2f}".format(lp, err_lp))
+# print("Ebind0 = {:.2f} +/- {:.2f}".format(Ebind0, err_Ebind0))
 
-average_length_fit = average_length_vec(n_input, lp, Ebind0)
+# average_length_fit = average_length_vec(n_input, lp, Ebind0)
+
+n_attach_input = n_attach_input / n_input
 
 plt.figure(figsize=(6, 4), dpi=300, constrained_layout=True)
 
 plt.plot(n_input, n_attach_input, 'o', color='blue', label='Data')
-plt.plot(n_input, n_input, color='black', ls='--', lw=1)
+# plt.plot(n_input, n_input, color='black', ls='--', lw=1)
+plt.axhline(1, color='black', ls='--', lw=1, label=r'$\langle n \rangle/ N = 1$')
 # plt.plot(n_input, average_length_fit, color='red', label=r'Fit:\\$l_p = {:.2f} \pm {:.2f}$\\$E_{{\mathrm{{bind}}}}^0 = {:.2f} \pm {:.2f}$'.format(lp, err_lp, Ebind0, err_Ebind0))
 
-plt.xlabel('Number of monomers')
-plt.ylabel('Number of attached monomers', fontsize=16)
+plt.xlabel(r'$N$', fontsize=16)
+plt.ylabel(r'$\langle n \rangle / N$', fontsize=16)
 
 plt.legend()
 
