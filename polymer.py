@@ -47,8 +47,8 @@ linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = 328
-# distance_from_axis = 0
+# distance_from_axis = 330
+distance_from_axis = 0
 
 # Angle of the filament with the wall
 angle = 90
@@ -61,11 +61,12 @@ heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
 # linker_list = np.ones(num_monomers)
+# linker_list = np.zeros(num_monomers)
 # linker_list = np.random.choice([0, 1], num_monomers)
 
 linker_list = []
 for i in range(num_monomers):
-    if i % 4 == 0:
+    if i % 1 == 0:
         linker_list.append(1)
     else:
         linker_list.append(0)
@@ -110,13 +111,13 @@ bond_styles = [
 
 # Angle styles: Angle type, Angle style, k, theta0
 angle_styles = [
-    [1, "harmonic", 1500.0, theta1],
-    [2, "harmonic", 1500.0, theta2],
-    [3, "harmonic", 1500.0, pi_by_2],
-    [4, "harmonic", 1500.0, phi1],
-    [5, "harmonic", 1500.0, phi2],
-    [6, "harmonic", 1500.0, phi3],
-    [7, "harmonic", 1500.0, phi4]
+    [1, "harmonic", 2500.0, theta1],
+    [2, "harmonic", 2500.0, theta2],
+    [3, "harmonic", 2500.0, pi_by_2],
+    [4, "harmonic", 2500.0, phi1],
+    [5, "harmonic", 2500.0, phi2],
+    [6, "harmonic", 2500.0, phi3],
+    [7, "harmonic", 2500.0, phi4]
 ]
 
 # Pair coefficients for hybrid style
@@ -144,7 +145,7 @@ groups = [
 
 # Iteration numbers
 steps_min = 2000
-steps_run = 5000000
+steps_run = 100000
 
 thermo_min = 100
 thermo_run = 10000
@@ -154,7 +155,7 @@ record_interval = 1000
 dump_interval_min = 100
 dump_interval_run = 1000
 
-temperture = 310.0
+temperture = 0.01
 time_step = 0.00001
 
 # Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
@@ -191,8 +192,8 @@ fix_nve_min = ["fix_min", 0.000001]
 
 # Fix 2: wall-atom LJ interactions
 fix_wall = [
-    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.1**(1/6)]],
-    ["walllinker", "linker", [1500.0, 2.1, 2.1 * 2.0**(1/6)]]
+    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.0**(1/6)]],
+    ["walllinker", "linker", [800.0, 2.1, 2.1 * 2.0**(1/6)]]
 ]
 
 # ----------------------------------------------------------------------------------
