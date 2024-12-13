@@ -128,4 +128,8 @@ plt.plot(s_list, r_curvature, label='Data', marker='o', color='black')
 plt.xlabel(r'$s\,\mathrm{(nm)}$')
 plt.ylabel(r'$r\,\mathrm{(nm)}$')
 
+plt.axhline(R, color='red', ls='--', label=r'Input $R_0 = {{{:.2f}}}\,\mathrm{{nm}}$'.format(R))
+
+plt.legend()
+
 plt.savefig('plots/curvature.{}.pdf'.format(run_i))
