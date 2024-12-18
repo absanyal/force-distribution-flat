@@ -329,19 +329,19 @@ def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, m
         
         # -----------------------------------------------------
         
-        input_f.write("compute kenergy all ke\n")
-        input_f.write("compute penergy all pe\n")
-        input_f.write("compute temperature all temp\n")
-        input_f.write("variable ken equal c_kenergy\n")
-        input_f.write("variable pen equal c_penergy\n")
-        input_f.write("variable temp equal c_temperature\n")
-        input_f.write("variable etotal equal v_ken+v_pen\n")
+        # input_f.write("compute kenergy all ke\n")
+        # input_f.write("compute penergy all pe\n")
+        # input_f.write("compute temperature all temp\n")
+        # input_f.write("variable ken equal c_kenergy\n")
+        # input_f.write("variable pen equal c_penergy\n")
+        # input_f.write("variable temp equal c_temperature\n")
+        # input_f.write("variable etotal equal v_ken+v_pen\n")
         
-        input_f.write("\n")
+        # input_f.write("\n")
         
-        input_f.write("fix printenergy all print ${record_interval} \"${tsteps} ${temp} ${ken} ${pen} ${etotal}\" file thermo/energy.${xx}.txt screen no\n")
+        # input_f.write("fix printenergy all print ${record_interval} \"${tsteps} ${temp} ${ken} ${pen} ${etotal}\" file thermo/energy.${xx}.txt screen no\n")
         
-        input_f.write("\n")
+        # input_f.write("\n")
         
         # -----------------------------------------------------
         
