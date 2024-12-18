@@ -16,4 +16,4 @@ plt.ylabel(r'$E_{\mathrm{bend}}\,(k_BT)$')
 
 plt.legend()
 
-plt.show()
+plt.savefig("measured_Ebend_vs_R0.pdf")
