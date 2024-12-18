@@ -128,4 +128,5 @@ final_total_energy = E_tot[-1]
 E_bend = final_total_energy - initial_total_energy
 
 print("R0 = {:.2f}".format(R))
+print
 print("E_bend = {:.4f} kBT".format(E_bend / kBT0))
