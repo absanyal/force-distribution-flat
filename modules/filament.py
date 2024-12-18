@@ -107,7 +107,10 @@ class filament:
         for unit_i, unit in enumerate(self.__monomer_layer_units):
             monomer_index, layer_i, next_layer_i, has_linker = unit
             if has_linker:
+                p1 = self.__layers[layer_i].positions[0]
                 p2 = self.__layers[layer_i].positions[1]
+                p3 = self.__layers[layer_i].positions[2]
+                p4 = self.__layers[layer_i].positions[3]
 
                 linker_heading = g
                 linker_starting_pos = p2 + d * g + abs(s1) * (h+f)
@@ -215,9 +218,6 @@ class filament:
             self.__angles.append([angle_type, i3, i2, i6])
 
             # Bonds and angles involving linkers
-
-            # linker_index = 0  # index of the linker in the list of linkers
-            # # This number may be less than the number of monomers, so must be incremented by one iff has_linker is True
 
             if has_linker:
                 linker = self.__linkers[linker_index]
