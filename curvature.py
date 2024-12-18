@@ -136,4 +136,4 @@ plt.axhline(R, color='red', label=r'$R_0 = {:.1f}\,\mathrm{{nm}}$'.format(R), li
 plt.axhline(R_cell, color='blue', label=r'$R_{{\mathrm{{cell}}}} = {:.1f}\,\mathrm{{nm}}$'.format(R_cell), linestyle='--')
 plt.legend()
 
-plt.savefig('plots/curvature.{}.pdf'.format(run_i))
+plt.savefig('plots/curvature_R0_{:.1f}.{}.pdf'.format(run_i, R))
