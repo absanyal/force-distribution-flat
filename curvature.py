@@ -132,9 +132,8 @@ plt.plot(s_list, r_curvature, label='Simulation', color='black', marker='o', lin
 plt.xlabel(r'$s\,\mathrm{(nm)}$')
 plt.ylabel(r'$R(s)\,\mathrm{(nm)}$')
 
-plt.axhline(R, color='red', label=r'$R_0$', linestyle='--')
-plt.axhline(R_cell, color='blue', label=r'$R_{\mathrm{cell}}$', linestyle='--')
-
+plt.axhline(R, color='red', label=r'$R_0 = {:.1f}\,\mathrm{{nm}}$'.format(R), linestyle='--')
+plt.axhline(R_cell, color='blue', label=r'$R_{{\mathrm{{cell}}}} = {:.1f}\,\mathrm{{nm}}$'.format(R_cell), linestyle='--')
 plt.legend()
 
 plt.savefig('plots/curvature.{}.pdf'.format(run_i))
