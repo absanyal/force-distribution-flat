@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import rcparams
 from scipy.optimize import curve_fit
 
-def f(x, m, c):
-    return m*x + c
+def f(x, m):
+    return m*x
 
 R_cell = 350
 
@@ -20,8 +20,8 @@ pop, pcov = curve_fit(f, x_list, Eb_list)
 x_fit = np.linspace(min(x_list), max(x_list), 1000)
 y_fit = f(x_fit, *pop)
 
-m, c = pop
-err_m, err_c = np.sqrt(np.diag(pcov))
+m= pop[0]
+# err_m = np.sqrt(np.diag(pcov))
 
 plt.figure()
 
@@ -32,20 +32,21 @@ plt.plot(x_fit, y_fit, label="Fitting", color='red', linestyle='--')
 plt.xlabel(r'$(1/R_{\rm cell} - 1/R_0)^2\,(\mathrm{nm}^{-2})$')
 plt.ylabel(r'$E_{\mathrm{bend}}\,(k_BT)$')
 
-# plt.xscale('log')
-# plt.yscale('log')
+plt.xscale('log')
+plt.yscale('log')
 
 plt.legend()
 
 plt.savefig("measured_Ebend_vs_R0.pdf")
 
 lp = m / (r_mono * (n-1))
-lp_err = err_m / (r_mono * (n-1))
+# lp_err = err_m / (r_mono * (n-1))
 
-print("Measured slope = {:.2f} +/- {:.2f}".format(m, err_m))
-print("Persistence length = {:.2f} +/- {:.2f}".format(lp, lp_err))
+print("Measured slope = {:.2f}".format(m))
+print("Persistence length = {:.2f}".format(lp))
 
 plt.clf()
+plt.cla()
 
 plt.plot(R0_list, Eb_list, 'o', label='Measured data', color='black')
 
@@ -57,6 +58,7 @@ plt.legend()
 plt.savefig("measured_Ebend_vs_R0_raw.pdf")
 
 plt.clf()
+plt.cla()
 
 x_list = ((1/R0_list))
 
