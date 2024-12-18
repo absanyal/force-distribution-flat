@@ -20,6 +20,7 @@ filament_info_file = 'info/filament_info.txt'
 
 # ----------------- SAMPLING PARAMETERS -----------------
 sample_window_fraction = 0.02
+kBT0 = 310
 
 # ----------------- EXPECTED DIFFUSION COEFFICIENT -----------------
 # In units of (microns)^2 / sec
@@ -28,6 +29,12 @@ D_expected = 5
 # ----------------- CELL RADIUS -----------------
 # In units of nm
 R_cell = 350
+
+# ----------------- EBIND0 -----------------
+# In units of kBT
+Ebind0 = 800
+
+Ebind0 = Ebind0 / kBT0
 
 ################################# READ DATA ###############################################
 
@@ -136,4 +143,6 @@ plt.axhline(R, color='red', label=r'$R_0 = {:.1f}\,\mathrm{{nm}}$'.format(R), li
 plt.axhline(R_cell, color='blue', label=r'$R_{{\mathrm{{cell}}}} = {:.1f}\,\mathrm{{nm}}$'.format(R_cell), linestyle='--')
 plt.legend()
 
-plt.savefig('plots/curvature_R0_{:.1f}.{}.pdf'.format(R, run_i))
+plt.title(r'$E_{{\mathrm{{bind}}}}^0 = {:.1f}\,k_BT$'.format(Ebind0))
+
+plt.savefig('plots/curvature_R0_{:.1f}_Ebind0_{:.2f}.{}.pdf'.format(R, Ebind0, run_i))
