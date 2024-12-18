@@ -7,6 +7,7 @@ mkdir -p com_pos
 mkdir -p link_pos
 mkdir -p mon_pos
 mkdir -p info
+mkdir -p thermo
 
 echo "variable xx uloop $nres" > in.variables
 echo >> in.variables
