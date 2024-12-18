@@ -40,7 +40,7 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 20
+num_monomers = 1
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
@@ -60,16 +60,16 @@ start_pos = [(xhi - xlo)/2.0 - distance_from_axis,
 heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
-# linker_list = np.ones(num_monomers)
+linker_list = np.ones(num_monomers)
 # linker_list = np.zeros(num_monomers)
 # linker_list = np.random.choice([0, 1], num_monomers)
 
-linker_list = []
-for i in range(num_monomers):
-    if i % 1 == 0:
-        linker_list.append(1)
-    else:
-        linker_list.append(0)
+# linker_list = []
+# for i in range(num_monomers):
+#     if i % 1 == 0:
+#         linker_list.append(1)
+#     else:
+#         linker_list.append(0)
         
 # linker_list = np.zeros(num_monomers)
 # gap = 6
@@ -144,8 +144,8 @@ groups = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 2000
-steps_run = 100000
+steps_min = 0
+steps_run = 1
 
 thermo_min = 100
 thermo_run = 10000
@@ -155,14 +155,14 @@ record_interval = 1000
 dump_interval_min = 100
 dump_interval_run = 1000
 
-temperture = 0.01
+temperture = 0.001
 time_step = 0.00001
 
 # Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
 energy_tolerance = 0.0
 force_tolerance = 1.0e-5
-max_iterations = 1000
-max_evaluations = 1000
+max_iterations = 0
+max_evaluations = 1
 minimization_parameters = [energy_tolerance,
                            force_tolerance, max_iterations, max_evaluations]
 
