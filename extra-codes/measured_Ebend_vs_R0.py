@@ -21,6 +21,7 @@ x_fit = np.linspace(min(x_list), max(x_list), 1000)
 y_fit = f(x_fit, *pop)
 
 m, c = pop
+err_m, err_c = np.sqrt(np.diag(pcov))
 
 plt.figure()
 
@@ -39,8 +40,10 @@ plt.legend()
 plt.savefig("measured_Ebend_vs_R0.pdf")
 
 lp = m / (r_mono * (n-1))
+lp_err = err_m / (r_mono * (n-1))
 
-print("Persistence length = {:.2f} nm".format(lp))
+print("Measured slope = {:.2f} +/- {:.2f}".format(m, err_m))
+print("Persistence length = {:.2f} +/- {:.2f}".format(lp, lp_err))
 
 plt.clf()
 
