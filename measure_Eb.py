@@ -12,7 +12,7 @@ cell_info_file = 'info/box_info.txt'
 filament_info_file = 'info/filament_info.txt'
 
 # ----------------- POTENTIAL PARAMETERS -----------------
-epsilon = 800
+epsilon = 5000
 sigma = 2.1
 r_cutoff = 30
 
@@ -88,37 +88,10 @@ num_vertices = num_monomers * 4
 
 distances_list = np.zeros((num_iterations, num_vertices * 3))
 
-# print(raw_data.shape)
-
-# for t_i, t in enumerate(t_list):
-#     for vertex_i in range(num_vertices):
-#         x = raw_data[1 + 3 * vertex_i][t_i]
-#         y = raw_data[2 + 3 * vertex_i][t_i]
-#         z = raw_data[3 + 3 * vertex_i][t_i]
-        
-#         rP = np.array([x, y, z])
-#         distances_list[t_i, vertex_i] = distance_from_surface(cyl=cell, rP=rP)
-
-# --------------------------------------------------------------------------------------------
-
 linker_potential_energy_list = np.zeros(num_iterations)
 
 def LJ93(r):
     return epsilon * ( (2/15) * (sigma / r)**9 - (sigma / r)**3 ) + epsilon * ( (2/15) * (sigma / r_cutoff)**9 - (sigma / r_cutoff)**3 )
-
-# for t_i in range(num_iterations):
-#     for vertex_i in range(num_vertices):
-#         r = distances_list[t_i, vertex_i]
-#         # print("Linker vertex {} distance: {:.2f}".format(vertex_i, r))
-#         if r < r_cutoff:
-#             linker_potential_energy_list[t_i] += LJ93(r)
-
-# --------------------------------------------------------------------------------------------
-
-# initial_linker_potential_energy = linker_potential_energy_list[0]
-# final_linker_potential_energy = linker_potential_energy_list[-1]
-
-# --------------------------------------------------------------------------------------------
 
 initial_total_energy = E_tot[0]
 final_total_energy = E_tot[-1]

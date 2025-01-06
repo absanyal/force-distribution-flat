@@ -8,6 +8,17 @@ def f(x, m):
 
 R_cell = 350
 
+kBT0 = 310
+
+E_bind0 = 5000
+
+ktheta = 25000
+
+E_bind0 = E_bind0 / kBT0
+ktheta = ktheta / kBT0
+
+
+
 r_mono = 2.5
 n = 20
 
@@ -21,7 +32,7 @@ x_fit = np.linspace(min(x_list), max(x_list), 1000)
 y_fit = f(x_fit, *pop)
 
 m= pop[0]
-# err_m = np.sqrt(np.diag(pcov))
+err_m = np.sqrt(np.diag(pcov))[0]
 
 plt.figure()
 
@@ -40,10 +51,10 @@ plt.legend()
 plt.savefig("measured_Ebend_vs_R0.pdf")
 
 lp = m / (r_mono * (n-1))
-# lp_err = err_m / (r_mono * (n-1))
+lp_err = err_m / (r_mono * (n-1))
 
 print("Measured slope = {:.2f}".format(m))
-print("Persistence length = {:.2f}".format(lp))
+print("Persistence length = {:.2f} +/- {:.2f} nm".format(lp, lp_err))
 
 plt.clf()
 plt.cla()

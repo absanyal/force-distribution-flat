@@ -20,11 +20,9 @@ filament_info_file = 'info/filament_info.txt'
 
 # ----------------- SAMPLING PARAMETERS -----------------
 sample_window_fraction = 0.02
-kBT0 = 310
 
-# ----------------- EXPECTED DIFFUSION COEFFICIENT -----------------
-# In units of (microns)^2 / sec
-D_expected = 5
+# ----------------- THERMODYNAMIC PARAMETERS -----------------
+kBT0 = 310
 
 # ----------------- CELL RADIUS -----------------
 # In units of nm
@@ -32,7 +30,7 @@ R_cell = 350
 
 # ----------------- EBIND0 -----------------
 # In units of kBT
-Ebind0 = 800
+Ebind0 = 5000
 
 Ebind0 = Ebind0 / kBT0
 
