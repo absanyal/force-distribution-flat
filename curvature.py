@@ -143,4 +143,5 @@ plt.legend()
 
 plt.title(r'$E_{{\mathrm{{bind}}}}^0 = {:.1f}\,k_BT$'.format(Ebind0))
 
-plt.savefig('plots/curvature_R0_{:.1f}_Ebind0_{:.2f}.{}.pdf'.format(R, Ebind0, run_i))
+# plt.savefig('plots/curvature_R0_{:.1f}_Ebind0_{:.2f}.{}.pdf'.format(R, Ebind0, run_i))
+plt.savefig('plots/curvature.pdf')
