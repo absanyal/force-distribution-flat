@@ -30,7 +30,7 @@ R_cell = 350
 
 # ----------------- EBIND0 -----------------
 # In units of kBT
-Ebind0 = 5000
+Ebind0 = 800
 
 Ebind0 = Ebind0 / kBT0
 
