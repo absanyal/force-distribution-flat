@@ -97,3 +97,34 @@ plt.xlabel(r'$r (\mathrm{nm})$')
 plt.legend(fontsize=12)
 
 plt.savefig('potential_and_probability.pdf')
+
+######################################################################################
+
+p_a = p_in_allowed_area
+
+N = 20
+
+# probability of n particles in the allowed area
+p_n = np.zeros(N + 1)
+p_n[0] = (1 - p_a)**N
+for n in range(1, N + 1):
+    p_n[n] = (1 - p_a)**(N - n) * p_a**n
+
+normalization = np.sum(p_n)
+
+p_n = p_n / normalization
+
+average_n = np.sum(np.arange(N + 1) * p_n)
+
+plt.figure(figsize=(5, 5))
+
+plt.plot(range(N + 1), p_n, 'o-', color='k')
+
+plt.axvline(x=average_n, color='r', linestyle='--', label=r'$\langle n \rangle = {:.2f}$'.format(average_n))
+
+plt.xlabel(r'$n$')
+plt.ylabel(r'$p(n)$')
+
+plt.legend()
+
+plt.savefig('probability_of_n_particles.pdf')
