@@ -244,6 +244,8 @@ if plot_attached_segment_length:
     ax.axhline(average_attached_segment_length, color='r', linestyle='--', linewidth=0.5, label='Average: {:.2f}'.format(average_attached_segment_length))
     ax.axhline(maximal_attached_segment_length, color='b', linestyle='--', linewidth=0.5, label='Maximum: {}'.format(maximal_attached_segment_length))
     
+    ax.axvline(t_list[recording_start_index], color='gray', linestyle='--', linewidth=0.5, label='Recording start')
+    
     ax.fill_between(t_list, upper_bound_attached_segment_length, lower_bound_attached_segment_length, color='gray', alpha=0.3)
     
     ax.set_xlabel(r'$t/\tau$')
