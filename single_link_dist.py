@@ -158,7 +158,7 @@ if plot_traces:
 
 values_counter = 0
 with open('r_histogram.dat', 'w') as f:
-    for s_i, s in enumerate(distances_smooth_list[:, 0]):
+    for s_i, s in enumerate(distances_list[:, 0]):
         if s < r_cutoff:
             f.write('{}\n'.format(s))
             values_counter += 1
