@@ -19,7 +19,7 @@ average_r_single = np.mean(s_single_list)
 
 plt.figure(figsize=(5, 5), constrained_layout=True)
 
-plt.hist(s_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{linker}}$ from LAMMPS', color='b', edgecolor='b', histtype='step', rwidth=1, lw=2.0)
+plt.hist(s_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{linker}}$', color='b', edgecolor='b', histtype='step', rwidth=1, lw=2.0)
 
 plt.hist(s_single_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{single}}$', color='k', edgecolor='r', histtype='step', rwidth=1, lw=2.0)
 
