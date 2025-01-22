@@ -23,7 +23,7 @@ plt.hist(s_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{linker}}
 
 plt.hist(s_single_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{single}}$', color='k', edgecolor='r', histtype='step', rwidth=1, lw=2.0)
 
-plt.axvline(x=r0, color='k', linestyle='--', label=r'$r_0 = {:.4f}$ nm'.format(r0), lw=1.0)
+# plt.axvline(x=r0, color='k', linestyle='--', label=r'$r_0 = {:.4f}$ nm'.format(r0), lw=1.0)
 
 # plt.axvline(x=r_min, color='g', linestyle='--', label=r'$r_{{\mathrm{{min}}}} = {:.4f}$ nm'.format(r_min), lw=1.0)
 # plt.axvline(x=r_max, color='g', linestyle='--', label=r'$r_{{\mathrm{{max}}}} = {:.4f}$ nm'.format(r_max), lw=1.0)
@@ -33,7 +33,7 @@ plt.axvline(x=average_r_single, color='r', linestyle='--', label=r'$\langle\Delt
 
 plt.plot(r_list_file, p_list_file, '-', color='k', label='Expected distribution')
 
-plt.xlabel(r'$\Delta\,s_{{\mathrm{{linker}}}}$ (nm)')
+plt.xlabel(r'$\Delta\,s_{{\mathrm{{}}}}$ (nm)')
 plt.ylabel('Probability density')
 
 plt.xlim(left = 1, right = max(r_list_file))
