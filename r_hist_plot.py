@@ -12,17 +12,24 @@ r_max = 2.1251
 r_list_file, p_list_file = np.loadtxt('extra-codes/expected_pr.dat', unpack=True)
 
 s_list = np.loadtxt('r_histogram.dat')
+s_single_list = np.loadtxt('r_histogram_single.dat')
 
 average_r = np.mean(s_list)
+average_r_single = np.mean(s_single_list)
 
 plt.figure(figsize=(5, 5), constrained_layout=True)
 
 plt.hist(s_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{linker}}$ from LAMMPS', color='b', edgecolor='b', histtype='step', rwidth=1, lw=2.0)
 
-plt.axvline(x=r0, color='r', linestyle='--', label=r'$r_0 = {:.4f}$ nm'.format(r0), lw=1.0)
-plt.axvline(x=r_min, color='g', linestyle='--', label=r'$r_{{\mathrm{{min}}}} = {:.4f}$ nm'.format(r_min), lw=1.0)
-plt.axvline(x=r_max, color='g', linestyle='--', label=r'$r_{{\mathrm{{max}}}} = {:.4f}$ nm'.format(r_max), lw=1.0)
+plt.hist(s_single_list, bins='auto', density=True, label=r'$\Delta\,s_{\mathrm{single}}$', color='k', edgecolor='r', histtype='step', rwidth=1, lw=2.0)
+
+plt.axvline(x=r0, color='k', linestyle='--', label=r'$r_0 = {:.4f}$ nm'.format(r0), lw=1.0)
+
+# plt.axvline(x=r_min, color='g', linestyle='--', label=r'$r_{{\mathrm{{min}}}} = {:.4f}$ nm'.format(r_min), lw=1.0)
+# plt.axvline(x=r_max, color='g', linestyle='--', label=r'$r_{{\mathrm{{max}}}} = {:.4f}$ nm'.format(r_max), lw=1.0)
+
 plt.axvline(x=average_r, color='b', linestyle='--', label=r'$\langle\Delta\,s_{{\mathrm{{linker}}}}\rangle = {:.4f}$ nm'.format(average_r), lw=1.0)
+plt.axvline(x=average_r_single, color='r', linestyle='--', label=r'$\langle\Delta\,s_{{\mathrm{{single}}}}\rangle = {:.4f}$ nm'.format(average_r_single), lw=1.0)
 
 plt.plot(r_list_file, p_list_file, '-', color='k', label='Expected distribution')
 
