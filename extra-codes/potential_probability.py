@@ -63,7 +63,10 @@ p_list = p_LJ93(r, epsilon, sigma, T)
 V_list = LJ93(r, epsilon, sigma)
 
 r_average = np.trapz(r * p_list, r)
-print('Average occupation distance:', r_average)
+print('Expected occupation distance:', r_average)
+
+E_avg = np.trapz(V_list * p_list, r)
+print('Expected energy:', E_avg)
 
 minimum = find_minima(r, V_list)
 
@@ -84,14 +87,20 @@ plt.axvline(x=0, color='k', linestyle='--', alpha=0.5, lw=0.5)
 
 plt.axhline(y=e_req, color='r', linestyle='--', label=r'$E_{{\mathrm{{req}}}} = {:.4f} \,\mathrm{{kBT}}$'.format(e_req))
 
+plt.axhline(y=-epsilon, color='r', linestyle='-.', label=r'$\epsilon = -{:.4f} \,\mathrm{{kBT}}$'.format(epsilon), lw=1.0)
+
 plt.axvline(x=minimum[0], color='r', linestyle='--', label=r'$r_{{0}} = {:.4f}\,\mathrm{{nm}}$'.format(minimum[0]), lw=0.5)
 
 plt.axvline(x=root1, color='g', linestyle='--', label=r'$r_{{\mathrm{{min}}}} = {:.4f}\,\mathrm{{nm}}$'.format(root1))
 plt.axvline(x=root2, color='g', linestyle='--', label=r'$r_{{\mathrm{{max}}}} = {:.4f}\,\mathrm{{nm}}$'.format(root2))
 
-plt.axvspan(root1, root2, alpha=0.1, color='g', label=r'$p(r_{{\mathrm{{min}}}} \le r \le r_{{\mathrm{{max}}}})= {:.4f}$'.format(p_in_allowed_area))
+# plt.axvspan(root1, root2, alpha=0.1, color='g', label=r'$p(r_{{\mathrm{{min}}}} \le r \le r_{{\mathrm{{max}}}})= {:.4f}$'.format(p_in_allowed_area))
+
+plt.axvspan(root1, root2, alpha=0.1, color='g', label=r'$p_{{\mathrm{{allowed}}}}= {:.4f}$'.format(p_in_allowed_area))
 
 plt.axvline(x=r_average, color='b', linestyle='--', label=r'$\langle r \rangle = {:.4f}\,\mathrm{{nm}}$'.format(r_average))
+
+plt.axhline(y=E_avg, color='b', linestyle='-.', label=r'$\langle E \rangle = {:.4f}\,\mathrm{{kBT}}$'.format(E_avg))
 
 plt.ylim(-epsilon - 1.0, max(p_list) + 1.0)
 plt.xlim(min(r), max(r))
@@ -100,9 +109,14 @@ plt.gca().yaxis.set_major_formatter(StrMethodFormatter('{x:,.1f}')) # 2 decimal 
 
 plt.xlabel(r'$r (\mathrm{nm})$')
 
-plt.legend(fontsize=10)
+plt.legend(fontsize=9)
 
 plt.savefig('potential_and_probability.pdf')
+
+with open("expected_pr.dat", "w") as f:
+    f.write("#r p(r)\n")
+    for i in range(len(r)):
+        f.write("{:.4f} {:.4f}\n".format(r[i], p_list[i]))
 
 ######################################################################################
 
