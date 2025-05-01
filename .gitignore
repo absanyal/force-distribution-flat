@@ -4,7 +4,8 @@
 !modules/
 !analysis_modules/
 !extra-codes/
-!jupyter_nbs/ 
+!jupyter_nbs/
+!ks_ktheta_estimation/ 
 !*.py
 !*.ipynb
 !submit_*.sh
