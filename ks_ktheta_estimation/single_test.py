@@ -36,7 +36,7 @@ def dE_per_monomer(a, Rcell, R0, ks, ktheta):
 
 a = 5
 Rcell = 350
-R0 = np.arange(50, 501, 50)
+R0 = np.array([100, 150, 200, 250, 300])
 
 ks = 100
 ktheta = 20
@@ -50,7 +50,7 @@ for i in range(len(R0)):
 
 popts, pcov = curve_fit(linear, x_axis, dE)
 m = popts[0]
-lp = m / (2 * (a/2))
+lp = m / ((a/2))
 
 print(("lp = {:.2f} nm").format(lp))
 

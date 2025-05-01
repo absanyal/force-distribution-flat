@@ -63,7 +63,7 @@ for ks_i, ks in enumerate(ks_list):
         
         popts, pcov = curve_fit(linear, x_axis, dE)
         m = popts[0]
-        lp = m / (2 * (a/2))
+        lp = m / ((a/2))
         # print("ks = {}, ktheta = {} | lp = {:.2f} nm".format(ks, ktheta, lp))
         
         ks_ktheta_phase_diagram[ks_i, ktheta_i] = lp
