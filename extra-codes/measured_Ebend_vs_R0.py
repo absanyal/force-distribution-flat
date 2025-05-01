@@ -98,8 +98,8 @@ for Ebind_i in range(len(Ebind_list)):
         print("Persistence length = {:.2f} +/- {:.2f} nm".format(lp, lp_err))
     
 # plt.xlabel(r'$(1/R_{\rm cell} - 1/R_0)^2\,(\mathrm{nm}^{-2})$')
-plt.xlabel(r'$\left(\frac{1}{R_{\rm cell}} - \frac{1}{R_0}\right)^2\,(\mathrm{nm}^{-1})$', fontsize=14)
-plt.ylabel(r'$E_{\mathrm{bend}}\,(k_BT)$', fontsize=14)
+plt.xlabel(r'$\left(\frac{1}{R_{\rm cell}} - \frac{1}{R_0}\right)^2\,(\mathrm{nm}^{-2})$', fontsize=14)
+plt.ylabel(r'$\Delta E_{\mathrm{bend}}\,(k_BT)$', fontsize=14)
 
 # plt.xscale('log')
 # plt.yscale('log')
