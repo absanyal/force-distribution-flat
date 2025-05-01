@@ -5,6 +5,9 @@ from scipy.optimize import curve_fit
 
 from numpy import arcsin, sqrt, pi
 
+colorlist = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'cyan', 'magenta']
+markerstyle_list = ['o-', 's-', '^-', 'D-', 'x-', 'v-', 'p-', '*-', '<-', '>-', 'h-']
+
 def linear(x, m):
     return m * x
 
@@ -35,7 +38,8 @@ def dE_per_monomer(a, Rcell, R0, ks, ktheta):
     return dE
 
 Rcell = 350
-R0 = np.linspace(50, 1000, 1000)
+# R0 = np.linspace(50, 1000, 1000)
+R0 = np.array([50, 100, 150, 200, 250, 300, 350, 400])
 a = 5
 
 ks_list = np.array([1, 50, 100, 150, 200])
@@ -67,8 +71,14 @@ for ks_i, ks in enumerate(ks_list):
         lp = m / (2 * (a/2))
         # print("ks = {}, ktheta = {} | lp = {:.2f} nm".format(ks, ktheta, lp))
         
-        plt.plot(x_axis, dE, 'o-', label=r'$k_s = {}$, $k_\theta = {}$, $l_p = {:.2f}$'.format(ks, ktheta, lp), 
-                 markersize=1, lw=1.0)
+        thiscolor = colorlist[ks_i % len(colorlist)]
+        thismarker = markerstyle_list[ktheta_i % len(markerstyle_list)]
+        
+        # plt.plot(x_axis, dE, 'o-', label=r'$k_s = {}$, $k_\theta = {}$, $l_p = {:.2f}$'.format(ks, ktheta, lp), 
+        #          markersize=1, lw=1.0)
+        
+        plt.plot(x_axis, dE, thismarker, label=r'$k_s = {}$, $k_\theta = {}$, $l_p = {:.2f}$'.format(ks, ktheta, lp),
+                 markersize=3, lw=1.0, color=thiscolor)
         
         points_calculated += 1
         percentage = (points_calculated / points_to_calculate) * 100
@@ -78,8 +88,8 @@ for ks_i, ks in enumerate(ks_list):
 plt.xlabel(r'$(\frac{1}{R_0} - \frac{1}{R_{cell}})^2$')
 plt.ylabel(r'$\Delta E$ (kT)')
 
-# plt.xscale('log')
-# plt.yscale('log')
+plt.xscale('log')
+plt.yscale('log')
 
 plt.legend(fontsize=8)
 
