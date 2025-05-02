@@ -46,34 +46,33 @@ def read_data(filename):
 
 headers, datasets = read_data("measured_Ebend_vs_R0.dat")
 
-Ebind_list, ktheta_list = headers
+ks_list, ktheta_list = headers
 
-Ebind_banlist = []
-Ebind_banlist = np.array(Ebind_banlist)
+ks_banlist = []
+ks_banlist = np.array(ks_banlist)
 
 R_cell = 350
-kBT0 = 310
+kBT0 = 1
 
 r_mono = 2.5
 n = 20
 
 plt.figure(figsize=(5, 5), constrained_layout=True)
 
-for Ebind_i in range(len(Ebind_list)):
+for ks_i in range(len(ks_list)):
 
-    Ebind = Ebind_list[Ebind_i]
-    ktheta = ktheta_list[Ebind_i]
-    thiscolor = colorlist[Ebind_i % len(colorlist)]
-    # thiscolor = plt.rcParams['axes.prop_cycle'].by_key()['color'][Ebind_i % len(plt.rcParams['axes.prop_cycle'].by_key()['color'])]
+    ks = ks_list[ks_i]
+    ktheta = ktheta_list[ks_i]
+    thiscolor = colorlist[ks_i % len(colorlist)]
 
-    if Ebind not in Ebind_banlist:
+    if ks not in ks_banlist:
 
-        Ebind = Ebind / kBT0
+        ks = ks / kBT0
         ktheta = ktheta / kBT0
 
-        print("Ebind = {:.2f} kBT, ktheta = {:.2f} kBT".format(Ebind, ktheta))
+        print("ks = {:.2f} kBT, ktheta = {:.2f} kBT".format(ks, ktheta))
 
-        R0_list, Eb_list = datasets[Ebind_i]
+        R0_list, Eb_list = datasets[ks_i]
 
         R0_list = np.array(R0_list)
         Eb_list = np.array(Eb_list)
@@ -91,11 +90,13 @@ for Ebind_i in range(len(Ebind_list)):
         lp = m / (r_mono * (n-1))
         lp_err = err_m / (r_mono * (n-1))
 
-        plt.plot(x_list, Eb_list, 'o', color=thiscolor, markersize = 3, label=r'$E_{{\mathrm{{bind}}}} = {:.2f}\,k_BT,\, k_{{\theta}} = {:.2f}\,k_BT$'.format(Ebind, ktheta))
-        plt.plot(x_fit, y_fit, color=thiscolor, linestyle='--', lw = 1, label=r'$l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(lp, lp_err))
+        plt.plot(x_list, Eb_list, 'o', color=thiscolor, markersize = 3)
+        plt.plot(x_fit, y_fit, color=thiscolor, linestyle='--', lw = 1, label=r'$k_s = {:.2f}\,k_BT,\, k_{{\theta}} = {:.2f}\,k_BT$, $l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$'.format(ks, ktheta, lp, lp_err))
 
         # print("Measured slope = {:.2f}".format(m))
-        print("Persistence length = {:.2f} +/- {:.2f} nm".format(lp, lp_err))
+        print("Persistence length (fitting)= {:.2f} +/- {:.2f} nm".format(lp, lp_err))
+        
+        print("-" * 10)
     
 # plt.xlabel(r'$(1/R_{\rm cell} - 1/R_0)^2\,(\mathrm{nm}^{-2})$')
 plt.xlabel(r'$\left(\frac{1}{R_{\rm cell}} - \frac{1}{R_0}\right)^2\,(\mathrm{nm}^{-2})$', fontsize=14)
