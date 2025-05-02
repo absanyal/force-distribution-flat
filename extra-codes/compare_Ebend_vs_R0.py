@@ -143,21 +143,21 @@ for ks_i in range(len(ks_list)):
         
         # Calculate the persistence length using the theoretical formula
         
-        dE_list = np.zeros(len(R0_list))
-        for i in range(len(R0_list)):
-            dE_list[i] = dE_per_monomer(a, R_cell, R0_list[i], ks, ktheta, kl) * (n)
+        # dE_list = np.zeros(len(R0_list))
+        # for i in range(len(R0_list)):
+        #     dE_list[i] = dE_per_monomer(a, R_cell, R0_list[i], ks, ktheta, kl) * (n)
             
-        popt, pcov = curve_fit(linear, x_list, dE_list)
-        m = popt[0]
-        l = m / (r_mono * (n))
-        l_err = np.sqrt(np.diag(pcov))[0] / (r_mono * (n))
+        # popt, pcov = curve_fit(linear, x_list, dE_list)
+        # m = popt[0]
+        # l = m / (r_mono * (n))
+        # l_err = np.sqrt(np.diag(pcov))[0] / (r_mono * (n))
         
-        theoryline = linear(x_fit, *popt)
-        plt.plot(x_fit, theoryline, color=thiscolor, linestyle=':', lw = 1, label=r'$k_s = {:.2f}\,k_BT,\, k_{{\theta}} = {:.2f}\,k_BT$, $l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$ (theory)'.format(ks, ktheta, l, l_err), markersize = 3)
+        # theoryline = linear(x_fit, *popt)
+        # plt.plot(x_fit, theoryline, color=thiscolor, linestyle=':', lw = 1, label=r'$k_s = {:.2f}\,k_BT,\, k_{{\theta}} = {:.2f}\,k_BT$, $l_p = {:.2f} \pm {:.2f}\,\mathrm{{nm}}$ (theory)'.format(ks, ktheta, l, l_err), markersize = 3)
         
-        print("lp (theory) = {:.2f} +/- {:.2f} nm".format(l, l_err))
+        # print("lp (theory) = {:.2f} +/- {:.2f} nm".format(l, l_err))
         
-        print("-" * 10)
+        # print("-" * 10)
     
 # plt.xlabel(r'$(1/R_{\rm cell} - 1/R_0)^2\,(\mathrm{nm}^{-2})$')
 plt.xlabel(r'$\left(\frac{1}{R_{\rm cell}} - \frac{1}{R_0}\right)^2\,(\mathrm{nm}^{-2})$', fontsize=14)
