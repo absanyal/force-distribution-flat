@@ -74,7 +74,7 @@ for t_i in range(num_time_steps):
 # Normalize the time-averaged correlations
 time_averaged_correlations /= num_time_steps
 
-with open("lp_data_linkers.dat", 'w') as f:
+with open("lp_data.dat", 'w') as f:
     f.write("# s \t C(s)\n")
     for s_i in range(len(s_list)):
         f.write("{} \t {}\n".format(s_list[s_i], time_averaged_correlations[s_i]))

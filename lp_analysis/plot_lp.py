@@ -17,7 +17,7 @@ def linear_envelope(s, lp):
     """
     return -s / lp
 
-s, corr_s = np.loadtxt('lp_data_linkers.dat', unpack=True)
+s, corr_s = np.loadtxt('lp_data.dat', unpack=True)
 
 L = len(s) + 1
 print("L: {}".format(L))
