@@ -2,7 +2,7 @@ import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
 
-def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, sim_parameters:list, folders:list, langevin_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool, fix_nve_min: list, fix_nve_run:list, fix_wall: list):
+def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, sim_parameters:list, folders:list, langevin_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool, fix_nve_min: list, fix_nve_run:list, fix_wall: list, shake_parameters: list):
     
     R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4 = filament_name.get_parameters()
 
@@ -241,6 +241,33 @@ def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, m
         input_f.write("\n")
         
         #------------------------------------------------------
+        
+        # Shake algorithm fix
+        shake_fix_name, shake_tolerance, shake_iterations, shake_print_every, shake_bonds, shake_angles, shake_types = shake_parameters
+        
+        if shake_bonds != [] or shake_angles != [] or shake_types != []:
+            input_f.write("fix {} all shake {} {} {}".format(shake_fix_name, shake_tolerance, shake_iterations, shake_print_every))
+            if shake_bonds != []:
+                input_f.write(" b ")
+                for bond in shake_bonds:
+                    input_f.write("{} ".format(bond))
+            if shake_angles != []:
+                input_f.write(" a ")
+                for angle in shake_angles:
+                    input_f.write("{} ".format(angle))
+            if shake_types != []:
+                input_f.write(" t ")
+                for type in shake_types:
+                    input_f.write("{} ".format(type))
+            input_f.write("\n")
+        else:
+            input_f.write("# No SHAKE constraints applied\n")
+        
+        #-------------------------------------------------------
+        
+        input_f.write("fix fixbalance all balance 1000 1.05 shift xy 10 1.0\n\n")
+        
+        #-------------------------------------------------------
         
         ########### PRINT ALL LINKER POSITIONS ################
         
