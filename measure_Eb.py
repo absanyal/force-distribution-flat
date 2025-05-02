@@ -12,11 +12,11 @@ cell_info_file = 'info/box_info.txt'
 filament_info_file = 'info/filament_info.txt'
 
 # ----------------- POTENTIAL PARAMETERS -----------------
-epsilon = 5000
+epsilon = 100
 sigma = 2.1
 r_cutoff = 30
 
-kBT0 = 310
+kBT0 = 1
 
 ################################# READ DATA ###############################################
 
