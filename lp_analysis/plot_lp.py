@@ -24,7 +24,8 @@ print("L: {}".format(L))
 
 # max_s = 60
 # max_s = int(s[-1] * 0.5)
-max_s = max(s) 
+max_s = max(s)
+
 print("Max s: {}".format(max_s))
 
 s = s[s < max_s]
@@ -43,6 +44,9 @@ if len(peak_indices) > 1:
     peak_heights = np.array(peak_heights)
 
     log_peaks = np.log(peak_heights)
+else:
+    print("Peaks found: {}".format(len(peak_indices)))
+    print("Not enough peaks to fit the envelope.")
 
 # Fit the envelope to the correlation function
 if len(peak_indices) > 1:
