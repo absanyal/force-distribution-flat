@@ -36,6 +36,8 @@ z_width = zhi - zlo
 # This is passed to write_polymer_data, do not change this line
 box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 
+create_membrane = 1
+
 ###################################################################################
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
@@ -213,5 +215,5 @@ write_polymer_data(f1, box_dimensions, mass, bond_styles,
 ###################################################################################
 
 # ---LAMMPS input file---
-write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
+write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, create_membrane=create_membrane, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
                    folders=folders, langevin_parameters=langevin_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_nve_run=fix_nve_run, fix_wall=fix_wall)

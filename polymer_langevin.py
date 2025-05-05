@@ -22,12 +22,12 @@ box_info_fname_str = 'info/box_info.txt'  # box info file
 linker_distribution_fname_str = 'info/linker_distribution.txt'
 
 ###################################################################################
-######################### BOX DIMENSIONS ##########################################
+######################### BOX AND MEMBRANE DIMENSIONS #############################
 ###################################################################################
 
-xlo, xhi = 0.0, 700
-ylo, yhi = 0.0, 1000
-zlo, zhi = 0.0, 700
+xlo, xhi = 0.0, 1000
+ylo, yhi = 0.0, 1001
+zlo, zhi = 0.0, 1000
 
 x_width = xhi - xlo
 y_width = yhi - ylo
@@ -36,19 +36,21 @@ z_width = zhi - zlo
 # This is passed to write_polymer_data, do not change this line
 box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 
+create_membrane = 0
+
 ###################################################################################
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 20
+num_monomers = 80
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
 radius_of_curvature = 100
 
 # Distance of the filament head from the long axis of the cylinder
-distance_from_axis = 330
-# distance_from_axis = 0
+# distance_from_axis = 305
+distance_from_axis = 0
 
 # Angle of the filament with the wall
 angle = 90
@@ -81,36 +83,36 @@ pi_by_2 = 90
 
 # Particle types
 mass = [
-    [1, 1.0, "monomer_vertex"],
-    [2, 0.25, "linker_vertex"]
+    [1, 1/8, "monomer_vertex"],
+    [2, 1/4, "linker_vertex"]
 ]
 
 # Bond styles: Bond type, Bond style, k, r0
 bond_styles = [
-    [1, "harmonic", 15000.0, a],
-    [2, "harmonic", 15000.0, a2],
-    [3, "harmonic", 15000.0, a1],
-    [4, "harmonic", 15000.0, 2 * l],
-    [5, "harmonic", 15000.0, gamma],
-    [6, "harmonic", 15000.0, aL]
+    [1, "harmonic", 100.0, a],
+    [2, "harmonic", 10.0, a2],
+    [3, "harmonic", 10.0, a1],
+    [4, "harmonic", 100.0, 2 * l],
+    [5, "harmonic", 100.0, gamma],
+    [6, "harmonic", 100.0, aL]
 ]
 
 # Angle styles: Angle type, Angle style, k, theta0
 angle_styles = [
-    [1, "harmonic", 2500.0, theta1],
-    [2, "harmonic", 2500.0, theta2],
-    [3, "harmonic", 2500.0, pi_by_2],
-    [4, "harmonic", 2500.0, phi1],
-    [5, "harmonic", 2500.0, phi2],
-    [6, "harmonic", 2500.0, phi3],
-    [7, "harmonic", 2500.0, phi4]
+    [1, "harmonic", 20, theta1],
+    [2, "harmonic", 20, theta2],
+    [3, "harmonic", 20, pi_by_2],
+    [4, "harmonic", 20, phi1],
+    [5, "harmonic", 20, phi2],
+    [6, "harmonic", 20, phi3],
+    [7, "harmonic", 20, phi4]
 ]
 
 # Pair coefficients for hybrid style
 pair_coeff = [
-    [1, 1, "zero", []],
+    [1, 1, "lj/cut", [5.0, 2.5, 2.5 * 2.0**(1/6)]],
     [2, 2, "zero", []],
-    [1, 2, "lj/cut", [5.0, 2.5, 2.5 * 2.0**(1/6)]]
+    [1, 2, "zero", []]
 ]
 
 # Pair cutoffs for hybrid style
@@ -130,19 +132,20 @@ groups = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 100000
+steps_min = 500000
 steps_run = 1000000
 
 thermo_min = 1000
 thermo_run = 10000
 
-record_interval = 1000
+record_interval = 100
 
 dump_interval_min = 100
 dump_interval_run = 1000
 
-temperture = [0.0, 0.0]
-time_step = 0.00001
+temperture = [1.0, 1.0]  # [min, max]
+# temperture = [0.0, 0.0]  # [min, max]
+time_step = 0.001
 
 # Minimization parameters: [energy_tolerance, force_tolerance, max_iterations, max_evaluations]
 energy_tolerance = 0.0
@@ -165,7 +168,7 @@ if auto_generate_seed:
 else:
     seed = fixed_seed
 
-langevin_damp = 1.0
+langevin_damp = 1.0  # Langevin damping coefficient
 
 langevin_parameters = [seed, langevin_damp]
 
@@ -174,17 +177,38 @@ langevin_parameters = [seed, langevin_damp]
 # Do not include langevin fix for all atoms, it is automatically generated
 
 # Fix 1: nve/limit integration for the minimization
-fix_nve_min = ["fix_min", 0.000001]
+fix_nve_min = ["fix_min", 0.01]
+# fix_nve_min = ["fix_min", 0.00001]
+
 
 # Fix 2: nve/limit integration for the simulation
-fix_nve_run = ["fix_run", 0.05]
-# fix_nve_run = []
+# fix_nve_run = ["fix_run", 0.01]
+fix_nve_run = []
 
 # Fix 3: wall-atom LJ interactions
 fix_wall = [
-    ["wallchain", "chain", [5.0, 2.1, 2.1 * 2.0**(1/6)]],
-    ["walllinker", "linker", [800.0, 2.1, 30.0]]
+    ["wallchain", "chain", [10.0, 2.1, 2.1 * (2/5)**(1/6)]],
+    ["walllinker", "linker", [10.0, 2.1, 3.0]]
 ]
+
+# ----------------------------------------------------------------------------------
+# SHAKE constraints
+shake_fix_name = "fixshake"
+
+# shake_bonds = [1, 5, 6]
+# shake_angles = [3, 4, 5, 6, 7]
+# shake_types = []
+
+shake_bonds = []
+shake_angles = []
+shake_types = []
+
+shake_tolerance = 0.0001
+shake_iterations = 20
+shake_print_every = 0
+
+# DO NOT CHANGE THIS LINE
+shake_parameters = [shake_fix_name, shake_tolerance, shake_iterations, shake_print_every, shake_bonds, shake_angles, shake_types]
 
 # ----------------------------------------------------------------------------------
 
@@ -210,5 +234,5 @@ write_polymer_data(f1, box_dimensions, mass, bond_styles,
 ###################################################################################
 
 # ---LAMMPS input file---
-write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
-                   folders=folders, langevin_parameters=langevin_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_nve_run=fix_nve_run, fix_wall=fix_wall)
+write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, create_membrane=create_membrane, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
+                   folders=folders, langevin_parameters=langevin_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_nve_run=fix_nve_run, fix_wall=fix_wall, shake_parameters=shake_parameters)
