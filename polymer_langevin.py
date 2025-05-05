@@ -26,7 +26,7 @@ linker_distribution_fname_str = 'info/linker_distribution.txt'
 ###################################################################################
 
 xlo, xhi = 0.0, 1000
-ylo, yhi = 0.0, 1001
+ylo, yhi = 0.0, 1000
 zlo, zhi = 0.0, 1000
 
 x_width = xhi - xlo
@@ -132,7 +132,7 @@ groups = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 500000
+steps_min = 5000
 steps_run = 1000000
 
 thermo_min = 1000
@@ -195,13 +195,13 @@ fix_wall = [
 # SHAKE constraints
 shake_fix_name = "fixshake"
 
-# shake_bonds = [1, 5, 6]
-# shake_angles = [3, 4, 5, 6, 7]
-# shake_types = []
-
-shake_bonds = []
-shake_angles = []
+shake_bonds = [5]
+shake_angles = [4, 5, 6]
 shake_types = []
+
+# shake_bonds = []
+# shake_angles = []
+# shake_types = []
 
 shake_tolerance = 0.0001
 shake_iterations = 20
