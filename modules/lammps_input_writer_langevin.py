@@ -2,7 +2,7 @@ import numpy as np
 from modules.angle import filter_angle
 from modules.filament import filament
 
-def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, create_membrane: bool, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, sim_parameters:list, folders:list, langevin_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool, fix_nve_min: list, fix_nve_run:list, fix_wall: list, shake_parameters: list):
+def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, create_membrane: bool, boundary_conditions: list, mass: list, bond_styles:list, angle_styles:list, pair_coeff:list, pair_cutoffs:list, groups:list, sim_parameters:list, folders:list, langevin_parameters:list, input_fname_str: str, filament_datafile:str, dump_minimization: bool, fix_nve_min: list, fix_nve_run:list, fix_wall: list, shake_parameters: list):
     
     R, d, a, a1, a2, l, s1, s2, aF, aL, theta1, theta2, gamma, phi1, phi2, phi3, phi4 = filament_name.get_parameters()
 
@@ -57,7 +57,9 @@ def write_lammps_input_langevin(filament_name: filament, box_dimensions: list, c
         input_f.write("dimension 3\n")
         input_f.write("neighbor 1.5 bin\n")
         input_f.write("neigh_modify every 1 delay 0 check yes\n")
-        input_f.write("boundary p p p\n")
+        # input_f.write("boundary p p p\n")
+        bc1, bc2, bc3 = boundary_conditions
+        input_f.write("boundary {} {} {}\n".format(bc1, bc2, bc3))
         
         input_f.write("\n")
         

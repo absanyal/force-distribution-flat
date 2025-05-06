@@ -38,11 +38,13 @@ box_dimensions = [xlo, xhi, ylo, yhi, zlo, zhi]
 
 create_membrane = 0
 
+boundary_conditions = ["f", "f", "f"]  # periodic boundary conditions
+
 ###################################################################################
 ######################### FILAMENT PARAMETERS #####################################
 ###################################################################################
 
-num_monomers = 80
+num_monomers = 150
 monomer_diameter = 5
 linker_distance = 2.5
 linker_diameter = 2
@@ -57,13 +59,17 @@ angle = 90
 angle = np.radians(angle)  # Converts to radians, do not change this line
 
 # Calculating the start position and heading of the filament
-start_pos = [(xhi - xlo)/2.0 - distance_from_axis,
-             (yhi - ylo)/2.0, (zhi - zlo)/2.0]
+# start_pos = [(xhi - xlo)/2.0 - distance_from_axis,
+#              (yhi - ylo)/2.0, (zhi - zlo)/2.0]
+
+start_pos = [(xhi - xlo)/2.0 - distance_from_axis, 
+             (yhi - ylo)/2.0, zhi - 50]
+
 heading = [0, np.cos(angle), -np.sin(angle)]
 
 # Linker list
-linker_list = np.ones(num_monomers)
-# linker_list = np.zeros(num_monomers)
+# linker_list = np.ones(num_monomers)
+linker_list = np.zeros(num_monomers)
 # linker_list = np.random.choice([0, 1], num_monomers)
 
 # Create the filament
@@ -117,7 +123,7 @@ pair_coeff = [
 
 # Pair cutoffs for hybrid style
 pair_cutoffs = [
-    ["zero", 30.0],
+    ["zero", 10.0],
     ["lj/cut", 8.0]
 ]
 
@@ -132,7 +138,7 @@ groups = [
 ###################################################################################
 
 # Iteration numbers
-steps_min = 5000
+steps_min = 500000
 steps_run = 1000000
 
 thermo_min = 1000
@@ -168,7 +174,7 @@ if auto_generate_seed:
 else:
     seed = fixed_seed
 
-langevin_damp = 1.0  # Langevin damping coefficient
+langevin_damp = 10.0  # Langevin damping coefficient
 
 langevin_parameters = [seed, langevin_damp]
 
@@ -234,5 +240,5 @@ write_polymer_data(f1, box_dimensions, mass, bond_styles,
 ###################################################################################
 
 # ---LAMMPS input file---
-write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, create_membrane=create_membrane, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
+write_lammps_input_langevin(filament_name=f1, box_dimensions=box_dimensions, create_membrane=create_membrane, boundary_conditions=boundary_conditions, mass=mass, bond_styles=bond_styles, angle_styles=angle_styles, pair_coeff=pair_coeff, pair_cutoffs=pair_cutoffs, groups=groups, sim_parameters=sim_parameters,
                    folders=folders, langevin_parameters=langevin_parameters, input_fname_str=input_fname_str, dump_minimization=dump_minimization, filament_datafile=data_fname_str, fix_nve_min=fix_nve_min, fix_nve_run=fix_nve_run, fix_wall=fix_wall, shake_parameters=shake_parameters)
