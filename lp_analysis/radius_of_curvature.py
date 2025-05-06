@@ -25,7 +25,8 @@ s = s[s < max_s]
 max_index = len(s)
 corr_s = corr_s[:max_index]
 
-lp_guess = 96.44
+# lp_guess = 96.44
+lp_guess = 47
 R_guess = 25
 
 pop, pcov = curve_fit(correlation, s, corr_s, p0=[lp_guess, R_guess])
@@ -52,6 +53,9 @@ plt.ylabel("Correlation function")
 
 plt.xlim(0, max_s)
 plt.ylim(-1, 1)
+
+plt.axhline(0, color='k', lw=0.5, ls='--', alpha=0.5)
+plt.axvline(0, color='k', lw=0.5, ls='--', alpha=0.5)
 
 plt.legend(loc='best', fontsize=8)
 
