@@ -13,6 +13,8 @@ def correlation(s, lp, R):
 
 s, corr_s = np.loadtxt('lp_data.dat', unpack=True)
 
+max_s_prev, lp_prev, lp_log_prev = np.loadtxt('lp_envelope.dat', unpack=True)
+
 L = len(s) + 1
 print("L: {}".format(L))
 
@@ -25,8 +27,10 @@ s = s[s < max_s]
 max_index = len(s)
 corr_s = corr_s[:max_index]
 
+
+
 # lp_guess = 96.44
-lp_guess = 47
+lp_guess = lp_log_prev
 R_guess = 25
 
 pop, pcov = curve_fit(correlation, s, corr_s, p0=[lp_guess, R_guess])
@@ -51,8 +55,6 @@ plt.plot(s, y_fit, 'r-', label=r'Fit: $lp = {:.2f} \pm {:.2f}$, $R = {:.2f} \pm 
 plt.xlabel(r'$s$')
 plt.ylabel("Correlation function")
 
-plt.xlim(0, max_s)
-plt.ylim(-1, 1)
 
 plt.axhline(0, color='k', lw=0.5, ls='--', alpha=0.5)
 plt.axvline(0, color='k', lw=0.5, ls='--', alpha=0.5)

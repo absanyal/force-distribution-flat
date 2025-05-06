@@ -103,3 +103,7 @@ plt.axvline(0, color='k', lw=0.5, ls='--', alpha=0.5)
 plt.legend()
 
 plt.savefig('persistence_linkers.pdf', bbox_inches='tight')
+
+with open('lp_envelope.dat', 'w') as f:
+    f.write("# max_s lp lp_log\n")
+    f.write("{} {} {}\n".format(max_s, lp, lp_log))
